@@ -56,7 +56,7 @@ ini_set('upload_max_filesize', '200');
  * home host
  */
 global $HOME;
-$HOME = '/development';
+$HOME = '/Fast';
 
 
 
