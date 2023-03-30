@@ -5,7 +5,7 @@ RewriteEngine on
 
 # set write base
 
-RewriteBase /Fast
+RewriteBase /staging
 
 # delvery folder if exist
 
