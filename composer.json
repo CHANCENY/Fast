@@ -1,0 +1,47 @@
+{
+    "name": "nyasu/htdocs",
+    "description": "Router in php",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Chance Nyasulu"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "phpmailer/phpmailer": "^6.7",
+        "dompdf/dompdf": "^2.0",
+        "ramsey/uuid": "^4.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Core\\": "Core/Router/RouterController/",
+            "Alerts\\": "Core/Alerts/",
+            "FormViewCreation\\": "Core/Forms/",
+            "GlobalsFunctions\\": "Core/Globals/",
+            "MiddlewareSecurity\\": "Core/Middleware/",
+            "Datainterface\\": "Core/Datainterface/",
+            "Modules\\": "Core/Modules/",
+            "Manipulator\\": "Views/DefaultViews/",
+            "Sessions\\": "Core/Sessions/",
+            "ConfigurationSetting\\": "Core/ConfigurationSetting/",
+            "Mailling\\": "Core/Mailling/",
+            "Assest\\": "Core/Assest/",
+            "CrudClassCollection\\": "Core/Datainterface/",
+            "Installation\\": "Core/Installation/",
+            "FileHandler\\": "Core/FileHandler",
+            "ApiHandler\\": "Core/ApiHandler/",
+            "ResponseHandler\\": "Core/ApiHandler/",
+            "Commerce\\": "Core/Commerce/",
+            "Curls\\": "Core/Curl/",
+            "CustomInstallation\\": "Core/CustomInstallation/",
+            "UI\\": "Core/UI/",
+            "Faker\\":"Core/Faker/",
+            "ExcelHandler\\": "Core/ExcelHandler/",
+            "ErrorLogger\\": "Core/ErrorLogger/",
+            "PDF\\": "Core/PDF/",
+            "Json\\": "Core/Json/",
+            "Datainterface\\mysql\\": "Core/Datainterface/mysql/"
+        }
+    }
+}
