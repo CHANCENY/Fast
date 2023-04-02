@@ -56,7 +56,21 @@ ini_set('upload_max_filesize', '200');
  * home host
  */
 global $HOME;
-$HOME = '/Fast';
+$HOME = '/developement';
+
+/**
+ * add sitemap file name to SITEMAP global variable below for example sitemap.xml
+ */
+global $SITEMAP;
+$SITEMAP = "";
+
+/**
+ * Robot file will be added here and its database configuration will be made only when database connection made
+ * Note: that all views set to administrator mode can not be added. you can pass @true below function to
+ * skip also private views
+ */
+\Robot\Robot::robotFileCreation();
+
 
 
 

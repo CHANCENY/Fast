@@ -41,7 +41,8 @@
             "ErrorLogger\\": "Core/ErrorLogger/",
             "PDF\\": "Core/PDF/",
             "Json\\": "Core/Json/",
-            "Datainterface\\mysql\\": "Core/Datainterface/mysql/"
+            "Datainterface\\mysql\\": "Core/Datainterface/mysql/",
+            "Robot\\": "Core/Robot/"
         }
     }
 }

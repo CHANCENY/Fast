@@ -151,5 +151,9 @@ class Globals
       }
       return $titlePage;
   }
+  public static function sitemap(){
+      global $SITEMAP;
+      return $SITEMAP;
+  }
 
 }

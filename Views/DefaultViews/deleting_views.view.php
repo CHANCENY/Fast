@@ -11,7 +11,7 @@ if(\GlobalsFunctions\Globals::method() === 'POST'){
 }
 
 $base = \GlobalsFunctions\Globals::protocal().'://'.
-    \GlobalsFunctions\Globals::serverHost().
+    \GlobalsFunctions\Globals::serverHost().'/'.
     \GlobalsFunctions\Globals::home();
 $backup = $base.'/backup-views';
 $restore = $base.'/Core/Temps/viewsfiles.zip';
