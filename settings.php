@@ -71,6 +71,12 @@ $SITEMAP = "";
  */
 \Robot\Robot::robotFileCreation();
 
+/**
+ * Total size of file can be uploaded per upload
+ */
+global $MAXFILESIZE;
+$MAXFILESIZE = 2000000;
+
 
 
 
