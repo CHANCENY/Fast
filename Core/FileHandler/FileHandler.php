@@ -3,11 +3,13 @@
 namespace FileHandler;
 
 use Alerts\Alerts;
+use Curls\Curls;
 use Datainterface\Database;
 use Datainterface\Delete;
 use Datainterface\Insertion;
 use Datainterface\MysqlDynamicTables;
 use Datainterface\Updating;
+use GlobalsFunctions\Globals;
 
 class FileHandler
 {
@@ -18,7 +20,8 @@ class FileHandler
          mkdir($path, 777);
       }
 
-      $home = isset($_SERVER['HTTPS']) ? 'https://'.$_SERVER['HTTP_HOST'] : 'http://'.$_SERVER['HTTP_HOST'];
+      $home = isset($_SERVER['HTTPS']) ? 'https://'.$_SERVER['HTTP_HOST'] : 'http://'.$_SERVER['HTTP_HOST'].'/'.
+      Globals::home();
       switch ($type){
           case 'tmp':
               $content = file_get_contents($data);
@@ -204,5 +207,12 @@ class FileHandler
       }
 
     return $files;
+ }
+
+ public static function collectInfoFileLink($link){
+     $curl = new Curls();
+     $curl->setUrl($link);
+     $curl->runCurl();
+     print_r($curl->getResultBody());
  }
 }

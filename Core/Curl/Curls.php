@@ -57,13 +57,32 @@ class Curls
     }
    private $baseUrl;
 
+    private $url;
+
+    /**
+     * @return mixed
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param mixed $url
+     */
+    public function setUrl($url): void
+    {
+        $this->url = $url;
+    }
+
+
 
     public function addHeader($key , $value){
         array_push($this->headers, $key.': '.$value);
     }
 
-    public function runCurl($endpoint){
-        $curl = curl_init($this->baseUrl.'/'.$endpoint);
+    public function runCurl($endpoint = ""){
+        $curl = curl_init( !empty($this->getUrl()) ? $this->getUrl() : $this->baseUrl.'/'.$endpoint);
 
         if(!empty($this->headers)){
            curl_setopt($curl, CURLOPT_HTTPHEADER, $this->headers);
