@@ -173,6 +173,10 @@ class Router
     }
 
 
+    /**
+     * @param string $completeFilePath
+     * @return void
+     */
     public static function checkMultiDirectory(string $completeFilePath){
         if(!empty($completeFilePath)){
 
@@ -209,7 +213,6 @@ class Router
      * @return void
      */
     public static function router($restricstionLevel = false){
-
         if(!empty(ConfigureSetting::getDatabaseConfig())) {
             $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
             $host = parse_url($_SERVER['REQUEST_URI'], PHP_URL_HOST);
@@ -272,7 +275,7 @@ class Router
                 }
 
             } else {
-               self::errorPages(404);
+                self::errorPages(404);
                 exit;
             }
         }else{
@@ -605,6 +608,9 @@ class Router
         }
     }
 
+    /**
+     * @return void
+     */
     public static function navReader(){
         try{
             ApiHandlerClass::isApiCall();
@@ -640,6 +646,9 @@ class Router
         }
     }
 
+    /**
+     * @return void
+     */
     public static function footerReader(){
         //Below handles footer section
         $security = new Security();
@@ -668,6 +677,10 @@ class Router
         }
     }
 
+    /**
+     * @param $url
+     * @return false|int
+     */
     public static function removeView($url){
         if(!empty(Globals::user()) && Globals::user()[0]['role'] === 'Admin'){
             $storage = 'Core/Router/Register/registered_path_available.json';
