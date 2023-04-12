@@ -7,6 +7,7 @@ use Datainterface\Database;
 use Datainterface\Delete;
 use Datainterface\Insertion;
 use Datainterface\MysqlDynamicTables;
+use Datainterface\Query;
 use Datainterface\SecurityChecker;
 use Datainterface\Selection;
 use Datainterface\Tables;
@@ -32,9 +33,12 @@ class Robot
   }
 
   public static function grouping() : array{
+      $t = self::schema()['table'];
+      $allowedQuery = "SELECT * FROM {$t} WHERE locationInRobot = :allowed AND status = :status";
+      $disallowedQuery = "SELECT * FROM {$t} WHERE locationInRobot = :disallowed AND status = :status";
       return [
-          'allowed'=>Selection::selectById(self::schema()['table'],['locationInRobot'=>'allowed']),
-          'disallowed'=> Selection::selectById(self::schema()['table'],['locationInRobot'=>'disallowed'])
+          'allowed'=>Query::query($allowedQuery, ['allowed'=>'allowed', 'status'=>1]),
+          'disallowed'=> Query::query($disallowedQuery, ['disallowed'=>'disallowed', 'status'=>1])
       ];
   }
 
@@ -59,7 +63,15 @@ class Robot
 
   }
 
-  public static function add($url){
+  public static function isAdded($url){
+      $isAddeQuery = "SELECT * FROM ".self::schema()['table']." WHERE viewUrl = :url AND status = :s";
+      if(!empty(Query::query($isAddeQuery,['url'=>$url,'s'=>1]))){
+          return true;
+      }
+      return false;
+  }
+
+  public static function add($url, $op = 'default-call'){
       if(!SecurityChecker::isConfigExist()){
           return false;
       }
@@ -81,6 +93,10 @@ class Robot
           if(!empty($result)){
               return self::upDateRobotFile();
           }
+      }else{
+          if($op === 'api-call'){
+              return Updating::update(self::schema()['table'],['status'=>1], ['viewUrl'=>$url]);
+          }
       }
       return false;
   }
@@ -90,6 +106,9 @@ class Robot
           return false;
       }
       self::runSchema();
+      if(!self::isAdded($url)){
+        self::add($url, 'api-call');
+      }
       $data =['locationInRobot'=>'disallowed'];
       if(Updating::update(self::schema()['table'], $data,['viewUrl'=>$url])){
           return self::upDateRobotFile();
@@ -102,6 +121,9 @@ class Robot
             return false;
         }
         self::runSchema();
+        if(!self::isAdded($url)){
+            self::add($url, 'api-call');
+        }
         $data =['locationInRobot'=>'allowed'];
         if(Updating::update(self::schema()['table'], $data,['viewUrl'=>$url])){
             return self::upDateRobotFile();
@@ -122,12 +144,12 @@ class Robot
 
       foreach ($groups['allowed'] as $key=>$value){
           if(gettype($value) === 'array'){
-              $allowedSection[] = trim('Allow: '.$host.'/'.$value['viewUrl'] ?? 'Allow: '.$host);
+              $allowedSection[] = trim('Allow: /'.$value['viewUrl'] ?? 'Allow: '.$host);
           }
       }
       foreach ($groups['disallowed'] as $key=>$value){
           if(gettype($value) === 'array'){
-              $disAllowedSection[] = trim('Disallow: '.$host.'/'.$value['viewUrl'] ?? 'Disallow: '.$host);
+              $disAllowedSection[] = trim('Disallow: /'.$value['viewUrl'] ?? 'Disallow: '.$host);
           }
       }
 
