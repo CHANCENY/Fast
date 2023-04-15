@@ -3,14 +3,17 @@
 
 
 if($_SERVER['REQUEST_METHOD'] === "GET"){
+    $routes = new RoutesManager\RoutesManager();
     \Sessions\SessionManager::setSession('configview',  \GlobalsFunctions\Globals::findViewByUrl($_GET['view']));
-
+    \Sessions\SessionManager::setSession('configview',  $routes->loadViewByUrl($_GET['view'])->getRoutes()[0]);
 }
 $view = \Sessions\SessionManager::getSession('configview');
 
 if($_SERVER['REQUEST_METHOD'] === "POST"){
     if(isset($_POST['view-changes'])){
-       echo \Alerts\Alerts::alert('info', \Core\Router::updateView($_POST, $view['view_url']));
+        $routes = new \Core\RouteConfiguration();
+        die($routes->updateView($_POST, $view['view_url']));
+       //echo \Alerts\Alerts::alert('info', \Core\Router::updateView($_POST, $view['view_url']));
     }
 }
 if(empty($view)){
@@ -60,7 +63,10 @@ if(empty($view)){
                                 ?>
                                 <input type="text" name="path-address" value="<?php echo $path;  ?>" id="path-address" autocomplete="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
                             </div>
-
+                            <div class="col-span-6 sm:col-span-4">
+                                <label for="path-address" class="block text-sm font-medium text-gray-700">Is default view</label>
+                                <input type="checkbox" name="default" id="path-address" autocomplete="email" class="mt-1">
+                            </div>
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="accessible" class="block text-sm font-medium text-gray-700">Accessibility</label>
                                 <select id="accessible"  name="accessible" autocomplete="country-name" class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">

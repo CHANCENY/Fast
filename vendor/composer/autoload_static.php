@@ -23,6 +23,7 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         ),
         'R' => 
         array (
+            'RoutesManager\\' => 14,
             'Robot\\' => 6,
             'ResponseHandler\\' => 16,
             'Ramsey\\Uuid\\' => 12,
@@ -108,6 +109,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         'Sabberworm\\CSS\\' => 
         array (
             0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
+        ),
+        'RoutesManager\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Core/Router/RouterController',
         ),
         'Robot\\' => 
         array (

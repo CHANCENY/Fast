@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c9109cc5-85aa-4cdc-aa63-3a62c9ecb1e2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Core/Robot/Robot.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Core/Router/RouterController/RouteConfiguration.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Views/DefaultViews/robot.view.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/DefaultViews/registered_path_available.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Core/Router/RouterController/RoutesManager.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/install.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.htaccess" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/blog.iml" beforeDir="false" />
@@ -857,13 +857,56 @@
       <change beforePath="$PROJECT_DIR$/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/.htaccess" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/Alerts/Alerts.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Alerts/Alerts.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Core/Globals/Globals.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Globals/Globals.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/ConfigurationSetting/basesetting.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Datainterface/Database.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Datainterface/Database.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Forms/ViewCreation.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Forms/ViewCreation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Installation/Installation.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Installation/Installation.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Middleware/Security.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Middleware/Security.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Robot/Robot.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Robot/Robot.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Core/Router/Register/registered_path_available.json" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Router/Register/registered_path_available.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Router/RouterController/RouteConfiguration.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Router/RouterController/RouteConfiguration.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Core/Router/RouterController/Router.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/Router/RouterController/Router.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/401.view.html" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/401.view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/403.view.html" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/403.view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/404.view.html" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/404.view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/500.view.html" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/500.view.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/Registration.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/Registration.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/addressing.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/addressing.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/configurationform.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/configurationform.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/create.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/create.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/createbackup.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/createbackup.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/danger.html" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/danger.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/database.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/database.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/debug.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/debug.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/deleting_views.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/deleting_views.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/dom-maniputor.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/dom-maniputor.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/errors.details.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/errors.details.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/extend.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/extend.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/footer.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/footer.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/forgotpassword.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/forgotpassword.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/index.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/index.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/info.html" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/info.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/intellation.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/intellation.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/inteller.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/inteller.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/listing-views.views.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/listing-views.views.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/logout.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/logout.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/mailing.confuguration.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/mailing.confuguration.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/metatags.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/metatags.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/nav.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/nav.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/profile.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/profile.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/robot.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/robot.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/search.result.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/search.result.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/searcher.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/searcher.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/searching.rec.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/searching.rec.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/signing.in.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/signing.in.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/uploader.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/uploader.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/users.commands.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/users.commands.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/users.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/users.view.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Views/DefaultViews/warning.html" beforeDir="false" afterPath="$PROJECT_DIR$/Core/DefaultViews/warning.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/settings.php" beforeDir="false" afterPath="$PROJECT_DIR$/settings.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_psr4.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_psr4.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/vendor/composer/autoload_static.php" beforeDir="false" afterPath="$PROJECT_DIR$/vendor/composer/autoload_static.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../index.php" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../index.php" beforeDir="false" afterPath="$PROJECT_DIR$/../index.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../settings.php" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../site/.htaccess" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../site/.idea/.gitignore" beforeDir="false" />
@@ -2121,7 +2164,7 @@
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/developement&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/xampp/htdocs/developement/Core/DefaultViews&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -2132,6 +2175,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\xampp\htdocs\developement\Core\DefaultViews" />
+      <recent name="C:\xampp\htdocs\developement\Core\Temps" />
       <recent name="C:\xampp\htdocs\Views\DefaultViews" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -2170,6 +2215,8 @@
       <workItem from="1680322223403" duration="45000" />
       <workItem from="1680412855178" duration="10485000" />
       <workItem from="1680425272162" duration="13051000" />
+      <workItem from="1681534719481" duration="7073000" />
+      <workItem from="1681551711419" duration="4338000" />
     </task>
     <servers />
   </component>

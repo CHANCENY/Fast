@@ -2,6 +2,7 @@
 namespace FormViewCreation;
 
 use Alerts\Alerts;
+use Core\RouteConfiguration;
 use Core\Router;
 
 @session_start();
@@ -35,26 +36,17 @@ class ViewCreation
            'url'=>htmlspecialchars(strip_tags($FormState['view-url'])),
            'path'=> htmlspecialchars(strip_tags($FormState['path-address'])),
            'access'=>htmlspecialchars(strip_tags($FormState['accessible'])),
+           'default'=> isset( $FormState['default']),
            'description'=> empty($FormState['description']) ? "No description" : htmlspecialchars(strip_tags($FormState['description']))
        ];
-
        $_SESSION['forms']['view-creation-form-data-storage'] = $data;
        return true;
    }
 
    public static function submitForm($FormState){
 
-       $save = \Core\Router::addView($FormState);
-       if( $save === false){
-
-           $alert = Alerts::alert("info", "Something went wrong Router::addview function");
-           $_SESSION['message']['creationviewform'] = $alert;
-           return;
-       }else{
-
-           $alert = Alerts::alert("info", $save);
-           $_SESSION['message']['creationviewform'] = $alert;
-           return;
-       }
+       $routes = new RouteConfiguration();
+       $result = $routes->addView($FormState);
+       $_SESSION['message']['creationviewform'] = Alerts::alert("info", $result);
    }
 }

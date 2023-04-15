@@ -6,6 +6,7 @@ use Alerts\Alerts;
 use ConfigurationSetting\ConfigureSetting;
 use Core\Router;
 use Installation\Installation;
+use RoutesManager\RoutesManager;
 use Sessions\SessionManager;
 
 class Database
@@ -114,24 +115,6 @@ class Database
 
    public static function installer(){
        if(empty(ConfigureSetting::getDatabaseConfig())){
-           $base = $_SERVER['DOCUMENT_ROOT'];
-           $views = "{$base}/Views/DefaultViews/";
-           if(is_dir($views) === false){
-               mkdir($views,recursive: true);
-           }
-           $listingViews = scandir($views);
-           $checkedlist = ['intellation.view.php', 'nav.php','footer.php','Registration.view.php','.','..'];
-           $flag = false;
-           foreach ($checkedlist as $key=>$value){
-               if(in_array($value, $listingViews) === false){
-                   if($value !== '.' && $value !== '..'){
-                       $flag = true;
-                   }
-               }
-           }
-          if($flag === true){
-              Installation::viewsFilesInstallations();
-          }
            SessionManager::setSession('sitenew', true);
            return;
        }
@@ -140,6 +123,10 @@ class Database
        if(empty($con)){
            $con = Database::database();
        }
+       //installation of tables
+       $routes = new RoutesManager();
+       $routes->installerViewDefaults();
+
        $maker = new MysqlDynamicTables();
        $columns = ['uid','firstname','lastname','mail','phone','password','address','role','verified','blocked'];
        $attributes = [

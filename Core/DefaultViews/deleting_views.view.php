@@ -4,8 +4,9 @@ $passing = false;
 
 if(\GlobalsFunctions\Globals::method() === 'POST'){
     $data = \ApiHandler\ApiHandlerClass::getPostBody();
+    $routes = new \Core\RouteConfiguration();
     $urlkey = htmlspecialchars(strip_tags($data['view_url'] ?? " "));
-    $result = \Core\Router::removeView($urlkey) ? ['status'=>200, 'msg'=>"View removed successfully"] : ['status'=>404, 'msg'=>"Failed to remove view"];
+    $result = ['status'=>200, 'msg'=>$routes->removeView($data['view_url'])];
     echo \ApiHandler\ApiHandlerClass::stringfiyData($result);
     exit;
 }
@@ -18,8 +19,9 @@ $restore = $base.'/Core/Temps/viewsfiles.zip';
 $url = "";
 
 if(!empty(\GlobalsFunctions\Globals::get('url'))){
+    $routes = new \RoutesManager\RoutesManager();
     $url = \GlobalsFunctions\Globals::get('url');
-    $routerObject = \GlobalsFunctions\Globals::findViewByUrl($url);
+    $routerObject = $routes->loadViewByUrl($url)->getRoutes()[0];
     $passing = true;
 
 }
