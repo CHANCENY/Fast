@@ -4,7 +4,9 @@ namespace Core;
 
 use Datainterface\Database;
 use Datainterface\Insertion;
+use Datainterface\mysql\TablesLayer;
 use Datainterface\MysqlDynamicTables;
+use Datainterface\SecurityChecker;
 use Datainterface\Selection;
 use ErrorLogger\ErrorLogger;
 use GlobalsFunctions\Globals;
@@ -58,6 +60,14 @@ class RouteConfiguration
 
    public static function appendMetatags($page){
        try {
+           if(!SecurityChecker::isConfigExist()){
+               return "";
+           }
+           $layer = new TablesLayer();
+           $tables = $layer->getTables()->tables();
+           if(!in_array('metatags', $tables)){
+               return "";
+           }
            $data = Selection::selectById('metatags',['page_url'=>$page]);
            if(!empty($data)){
               $lineOfMetaTags = "";

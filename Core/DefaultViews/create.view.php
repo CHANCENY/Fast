@@ -46,6 +46,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                             <div class="col-span-6 sm:col-span-3">
                                 <label for="view-url" class="block text-sm font-medium text-gray-700">View url</label>
                                 <input type="text" name="view-url" id="view-url" autocomplete="family-name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                <span id="warnings"></span>
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
@@ -72,7 +73,7 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 text-right sm:px-6">
-                        <button type="submit" name="creating-view-default" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save</button>
+                        <button type="submit" id="lock" name="creating-view-default" class="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Save</button>
                     </div>
                 </div>
             </form>
@@ -84,4 +85,23 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
     <div class="py-5">
         <div class="border-t border-gray-200"></div>
     </div>
+</div>
+<div>
+    <script type="application/javascript">
+        const urlInput = document.getElementById('view-url').addEventListener('input', (e)=>{
+            const inputData = e.target.value;
+            if(inputData !== null){
+                let found = inputData.indexOf('/');
+                if(found >= 0){
+                    document.getElementById('lock').setAttribute('disabled', 'true');
+                    let sp = document.getElementById('warnings');
+                    sp.style.color = 'red';
+                    sp.innerText = "(/) is not allowed!";
+                }else{
+                    document.getElementById('warnings').innerText = " ";
+
+                }
+            }
+        })
+    </script>
 </div>

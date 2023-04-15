@@ -24,9 +24,9 @@ class Router
     public static function clearUrl($content){
 
         if(!empty($content)){
-            $content = str_replace("\\", "", $content);
+            $content = str_replace("\\", "/", $content);
             $content = str_replace('\/'," ",$content);
-            $content = str_replace('/', '/', $content);
+            $content = str_replace('//', '/', $content);
             return $content;
         }
     }
@@ -79,12 +79,32 @@ class Router
             $_SESSION['public_data'] = $data;
 
             if($restricstionLevel === true){
+                $error = [
+                    'code'=>404,
+                    'message'=>"View not found on url {$path}",
+                    'location'=> __FILE__
+                ];
+
                 $security = new Security();
                 $result = $security->securityView($foundView);
                 $foundView = $routes->loadViewByUrl($result)->getRoutes();
-                !empty($foundView) ? self::requiringFile($foundView[0]) : die("Sorry view not found");
+                if(!empty($foundView)){
+                    self::requiringFile($foundView[0]);
+                }else {
+                    ErrorLogger::log(NULL, $error);
+                    Router::errorPages(404);
+                }
             }else{
-                self::requiringFile($foundView);
+                if(empty($foundView)){
+                    ErrorLogger::log(NULL, [
+                        'code'=>404,
+                        'message'=>"View not found on url {$path}",
+                        'location'=> __FILE__
+                    ]);
+                    Router::errorPages(404);
+                }else{
+                    self::requiringFile($foundView);
+                }
             }
         }else{
 

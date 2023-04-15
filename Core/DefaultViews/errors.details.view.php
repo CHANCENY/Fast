@@ -30,7 +30,7 @@ if(isset($user) && $user[0]['role'] === 'Admin'){
             $password = $user[0]['password'];
             $pass  =\GlobalsFunctions\Globals::get('password');
             $useremail = \GlobalsFunctions\Globals::get('username');
-            if($userEmail === $useremail && $pass === $password && $user[0]['role'] === "Admin"){
+            if($userEmail === $useremail && password_verify($pass, $password) && $user[0]['role'] === "Admin"){
                 $result = \ErrorLogger\ErrorLogger::deleteErrors();
                 if($result){
                     echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200,'msg'=>'Cleared']);
