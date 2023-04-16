@@ -157,6 +157,8 @@ class RoutesManager
     }
 
     public function installerViewDefaults(){
+        $flag = false;
+        $temp = [];
         if(SecurityChecker::isConfigExist()){
           $list = $this->tempReaderView();
           foreach ($list as $key=>$value){
@@ -168,7 +170,13 @@ class RoutesManager
               $value['view_path_absolute'] = "Core/DefaultViews/{$filename}";
               $value['view_path_relative'] = "Core/DefaultViews/{$filename}";
               $this->saveRoute($value);
+              $temp[] = $value;
+              $flag = true;
           }
+        }
+
+        if($flag === false){
+            $_SESSION['viewsstorage'] = $temp;
         }
     }
 
