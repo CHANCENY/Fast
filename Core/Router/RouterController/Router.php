@@ -172,8 +172,8 @@ class Router
      * @return void
      */
     public static function errorPages($code){
-        $storage = $_SERVER['DOCUMENT_ROOT'].'/Core/Router/Register/registered_path_available.json';
-        $views = json_decode(file_get_contents($storage), true);
+        $routes = new RouteConfiguration();
+        $storage = $routes->getAllViews();
         switch ($code){
             case 404:
                 $error = [
@@ -183,7 +183,7 @@ class Router
                 ];
                 ErrorLogger::log(null,$error);
                 $foundViews = [];
-                foreach ($views as $view){
+                foreach ($storage as $key=>$view){
                     if($view['view_url'] === '404'){
                         $foundViews = $view;
                         break;
@@ -199,7 +199,7 @@ class Router
                 ];
                 ErrorLogger::log(null,$error);
                 $foundViews = [];
-                foreach ($views as $view){
+                foreach ($storage as $key=>$view){
                     if($view['view_url'] === '500'){
                         $foundViews = $view;
                         break;
@@ -215,7 +215,7 @@ class Router
                 ];
                 ErrorLogger::log(null,$error);
                 $foundViews = [];
-                foreach ($views as $view){
+                foreach ($storage as $key=>$view){
                     if($view['view_url'] === '401'){
                         $foundViews = $view;
                         break;
@@ -231,7 +231,7 @@ class Router
                 ];
                 ErrorLogger::log(null,$error);
                 $foundViews = [];
-                foreach ($views as $view){
+                foreach ($storage as $key=>$view){
                     if($view['view_url'] === '403'){
                         $foundViews = $view;
                         break;
