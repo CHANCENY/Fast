@@ -182,6 +182,9 @@ class Robot
   }
 
   public static function robotFileCreation($privateDefault = false){
+      if(!SecurityChecker::isConfigExist()){
+          return;
+      }
       $views = new RouteConfiguration();
       $allViews = $views->getAllViews();
       foreach ($allViews as $key=>$value){
