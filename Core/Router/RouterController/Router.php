@@ -60,8 +60,10 @@ class Router
 
             //looking if home /
             if(trim(str_replace('/','', $path)) === '' ||
-                trim(str_replace('/','', $path)) === trim(str_replace('/','',Globals::home()))){
+                trim(str_replace('/','', $path)) === trim(str_replace('/','',Globals::home())) ||
+                str_replace('/','',$path) === str_replace('/','',Globals::home().'/'.Globals::home())){
                 $path = self::homeUrl();
+
             }
 
             foreach ($routers as $key=>$value){
@@ -308,7 +310,7 @@ class Router
         $security = new Security();
         $user= $security->checkCurrentUser();
         $base = $_SERVER['DOCUMENT_ROOT'];
-        if($user === "U-ADMIN"){
+        if($user === "U-Admin"){
             if(file_exists("{$base}/Core/DefaultViews/footer.php")){
                 require_once "{$base}/Core/DefaultViews/footer.php";
             }else{
@@ -318,7 +320,7 @@ class Router
             /*
             * Your nav will load from here if exist in Views directory
             */
-            if(file_exists($base.'Views/footer.view.php')){
+            if(file_exists($base.'/Views/footer.view.php')){
                 require_once $base.'/Views/footer.view.php';
             }else{
                 //default nav will load here with menus that are not admin based

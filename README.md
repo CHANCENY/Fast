@@ -1,7 +1,7 @@
 # Fast-framework
-__Fast-framework__ is lightweight php core framework that
-abstract developer from routing process, authenticating users,
-and many more. This framework is _open source framework._
+>Fast-framework is lightweight php core framework that
+>abstract developer from routing process, authenticating users,
+>and many more. This framework is _open source framework._
 ---
 ## How to use Fast-framework.
 
@@ -15,7 +15,7 @@ and many more. This framework is _open source framework._
 >   * url: index
 > * To create view always use build-in form
 > * You can make your own login page but signing in and out of users please use build-in Class method for efficient purposes.
-
+---
 ## Mandatory Edits To Make Before Starting Use This Framework
 >On root of this framework package there index.php, setting.php and .htaccess files
 > ### .htaccess file
@@ -33,7 +33,7 @@ and many more. This framework is _open source framework._
 >   global $HOMEPAGE;
 >   $HOMEPAGE = 'change here give home url';
 > ```
-
+---
 ## More Documentation
 Visit this website
 [Fast Framework](https://fast.com "Fast Framework")

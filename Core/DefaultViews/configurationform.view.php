@@ -12,8 +12,7 @@ $view = \Sessions\SessionManager::getSession('configview');
 if($_SERVER['REQUEST_METHOD'] === "POST"){
     if(isset($_POST['view-changes'])){
         $routes = new \Core\RouteConfiguration();
-        die($routes->updateView($_POST, $view['view_url']));
-       //echo \Alerts\Alerts::alert('info', \Core\Router::updateView($_POST, $view['view_url']));
+       echo \Alerts\Alerts::alert('info', $routes->updateView($_POST, $view['view_url']));
     }
 }
 if(empty($view)){
