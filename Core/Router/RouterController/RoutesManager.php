@@ -176,6 +176,17 @@ class RoutesManager
         }
 
         if($flag === false){
+            $list = $this->tempReaderView();
+            foreach ($list as $key=>$value){
+                $filename = "";
+                if(!empty( $value['view_path_absolute'])){
+                    $list = explode('/', $value['view_path_absolute']);
+                    $filename = end($list);
+                }
+                $value['view_path_absolute'] = "Core/DefaultViews/{$filename}";
+                $value['view_path_relative'] = "Core/DefaultViews/{$filename}";
+                $temp[] = $value;
+            }
             $_SESSION['viewsstorage'] = $temp;
         }
     }

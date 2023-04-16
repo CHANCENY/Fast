@@ -107,6 +107,8 @@ class Router
                 }
             }
         }else{
+            $routes = new RoutesManager();
+            $routes->installerViewDefaults();
 
             //install framework
             $viewFormat =[
@@ -281,8 +283,8 @@ class Router
                     require_once $base.'/Views/nav.view.php';
                 }else{
                     //default nav will load here with menus that are not admin based
-                    if(file_exists("{$base}/Views/DefaultViews/nav.php")){
-                        require_once 'Views/DefaultViews/nav.php';
+                    if(file_exists("{$base}/Core/DefaultViews/nav.php")){
+                        require_once 'Core/DefaultViews/nav.php';
                     }
                 }
                 global $connection;
@@ -320,8 +322,8 @@ class Router
                 require_once $base.'/Views/footer.view.php';
             }else{
                 //default nav will load here with menus that are not admin based
-                if(file_exists($base.'/Views/DefaultViews/footer.php')){
-                    require_once $base.'/Views/DefaultViews/footer.php';
+                if(file_exists($base.'/Core/DefaultViews/footer.php')){
+                    require_once $base.'/Core/DefaultViews/footer.php';
                 }else{
                     // @todo creating footer.php file and require it
                 }
