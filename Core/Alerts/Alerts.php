@@ -16,7 +16,7 @@ class Alerts
              }else{
                  $midder= $listUri[1];
              }
-             $completePath = "{$_SERVER['DOCUMENT_ROOT']}/{$midder}/DefaultViews/{$type}.html";
+             $completePath = "Core/DefaultViews/{$type}.html";
 
              if(is_file($completePath)){
                  if(file_exists($completePath)){

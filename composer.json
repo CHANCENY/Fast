@@ -42,7 +42,8 @@
             "PDF\\": "Core/PDF/",
             "Json\\": "Core/Json/",
             "Datainterface\\mysql\\": "Core/Datainterface/mysql/",
-            "Robot\\": "Core/Robot/"
+            "Robot\\": "Core/Robot/",
+            "RoutesManager\\": "Core/Router/RouterController/"
         }
     }
 }

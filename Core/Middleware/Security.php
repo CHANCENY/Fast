@@ -2,6 +2,8 @@
 
 namespace MiddlewareSecurity;
 
+use Core\Router;
+use ErrorLogger\ErrorLogger;
 use GlobalsFunctions\Globals;
 
 class Security extends Globals
@@ -70,4 +72,29 @@ class Security extends Globals
 
        return "U-COMMON";
    }
+
+    /**
+     * @return string
+     */
+    public function securityView(array $foundView){
+        $user = $this->checkCurrentUser();
+
+        if(!empty($foundView)){
+            $admin = ['public','private','administrator','moderator'];
+            $normalUser = ['public','moderator'];
+            $anonymous = ['public'];
+            if ($user === "U-Admin" && in_array($foundView['view_role_access'], $admin)) {
+                $_SESSION['access']['role'] = 1;
+                return $foundView['view_url'];
+            }
+            elseif ($user === "V-VERIFIED" && in_array($foundView['view_role_access'], $normalUser)) {
+                return $foundView['view_url'];
+            }
+            elseif ($user === "U-NULL" && in_array($foundView['view_role_access'], $anonymous)) {
+                return $foundView['view_url'];
+            }
+            return "404";
+        }
+    }
+
 }

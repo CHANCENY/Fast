@@ -4,13 +4,11 @@ namespace Robot;
 
 use Core\RouteConfiguration;
 use Datainterface\Database;
-use Datainterface\Delete;
 use Datainterface\Insertion;
 use Datainterface\MysqlDynamicTables;
 use Datainterface\Query;
 use Datainterface\SecurityChecker;
 use Datainterface\Selection;
-use Datainterface\Tables;
 use Datainterface\Updating;
 use GlobalsFunctions\Globals;
 
@@ -43,8 +41,10 @@ class Robot
   }
 
   public static function runSchema(){
-      $maker = new MysqlDynamicTables();
-      $maker->resolver(Database::database(), self::schema()['col'], self::schema()['att'],self::schema()['table'], false);
+      if(SecurityChecker::isConfigExist()){
+          $maker = new MysqlDynamicTables();
+          $maker->resolver(Database::database(), self::schema()['col'], self::schema()['att'],self::schema()['table'], false);
+      }
   }
 
   public static function remove($url){
@@ -182,6 +182,9 @@ class Robot
   }
 
   public static function robotFileCreation($privateDefault = false){
+      if(!SecurityChecker::isConfigExist()){
+          return;
+      }
       $views = new RouteConfiguration();
       $allViews = $views->getAllViews();
       foreach ($allViews as $key=>$value){

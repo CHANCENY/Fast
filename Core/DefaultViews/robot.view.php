@@ -15,25 +15,25 @@ if(!empty(\GlobalsFunctions\Globals::get('action')) && !empty(\GlobalsFunctions\
    if(trim($action) == "remove"){
        $result = \Robot\Robot::remove(trim($url));
        $message = $result ? "View: {$view['view_name']} has been removed from Robots.txt file." : "View: {$view['view_name']} failed to be removed from Robots.txt file.";
-       echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message, 'inner'=>'Add to robot file']);
+       echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message]);
    }
    elseif (trim($action) == 'add'){
-       $result = \Robot\Robot::add($url, 'api-call');
+       $result = \Robot\Robot::add($url);
        $message = $result ? "View: {$view['view_name']} has been added to Robots.txt file" : "View: {$view['view_name']} failed to be added to Robots.txt file.";
-       echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message, 'inner'=>'Remove from robot file']);
+       echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message]);
    }
    elseif (trim($action) == 'disallow'){
        $result = \Robot\Robot::disAllowed($url);
        $message = $result ? "View: {$view['view_name']} has been added to disallowed section of Robots.txt file" : "View: {$view['view_name']} failed to be added to disallowed section of Robots.txt file.";
-       echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message, 'inner'=>'Change to allow section']);
+       echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message]);
    }elseif (trim($action) == 'allowed'){
        $result = \Robot\Robot::allowed($url);
        $message = $result ? "View: {$view['view_name']} has been added to allowed section of Robots.txt file" : "View: {$view['view_name']} failed to be added to allowed section of Robots.txt file.";
-       echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message, 'inner'=>'Change to disAllow section']);
+       echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message]);
    }else{
        $result = \Robot\Robot::upDateRobotFile();
        $message = $result ? "Robots.txt file updated" : "Robots.txt file failed to update";
-       echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message, 'inner'=>'']);
+       echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message]);
    }
    exit;
 }
@@ -102,7 +102,7 @@ $host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
         const urlAvailable = document.getElementById('urls').value;
         const listUrls = urlAvailable.split(',');
 
-        const sendingRequest = (params, id)=>{
+        const sendingRequest = (params)=>{
             const xhr  = new XMLHttpRequest();
             let url = document.getElementById('host').value+params;
             console.log(url)
@@ -123,7 +123,6 @@ $host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
                     div.appendChild(p1);
                     div.appendChild(p2)
                     const alertBox = document.getElementById('alert-boxes');
-                    const targeted = document.getElementById(id).textContent = data.inner;
                     alertBox.appendChild(div);
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                     setTimeout(()=>{
@@ -160,7 +159,7 @@ $host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
                 const action = list[list.length - 1];
                 const url = list[0];
                 console.log(action);
-                sendingRequest(`/robot?action=${action}&url=${url}`, id);
+                sendingRequest(`/robot?action=${action}&url=${url}`);
             })
         }
     </script>

@@ -10,6 +10,7 @@ return array(
     'Svg\\' => array($vendorDir . '/phenx/php-svg-lib/src/Svg'),
     'Sessions\\' => array($baseDir . '/Core/Sessions'),
     'Sabberworm\\CSS\\' => array($vendorDir . '/sabberworm/php-css-parser/src'),
+    'RoutesManager\\' => array($baseDir . '/Core/Router/RouterController'),
     'Robot\\' => array($baseDir . '/Core/Robot'),
     'ResponseHandler\\' => array($baseDir . '/Core/ApiHandler'),
     'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),

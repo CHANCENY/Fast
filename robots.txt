@@ -1,0 +1,42 @@
+# This applies that all client need to follows these rules
+User-agent: *
+# This is disallowed section that means directories and files that dont need to be crawled
+Disallow: /Core/
+Disallow: /Backups/
+Disallow: /Files/
+Disallow: /Json-store/
+Disallow: /vendor/
+Disallow: /Views/
+Disallow: /Views/DefaultViews/
+Disallow: /Js/
+Disallow: /assets/
+Disallow: /Backups/
+Disallow: /settings.php
+Disallow: /index.php
+Disallow: /composer.json
+Disallow: /composer.lock
+Disallow: /README.md
+Disallow: /.gitIgnore
+Disallow: /.htaccess
+
+# This is allowed section which might override above disallowed
+Allow: /registration
+Allow: /landing
+Allow: /sign-in
+Allow: /installation
+Allow: /tests
+Allow: /404
+Allow: /500
+Allow: /addressing-handler
+Allow: /401
+Allow: /403
+Allow: /sign-out
+Allow: /reset-password
+Allow: /errorhandler
+Allow: /index
+Allow: /default-index
+Allow: /default
+Allow: /chance
+
+# This is sitemap location indicator
+Sitemap: http://localhost/developement/

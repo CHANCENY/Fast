@@ -77,6 +77,12 @@ $SITEMAP = "";
 global $MAXFILESIZE;
 $MAXFILESIZE = 2000000;
 
+/**
+ * Url of home page by default index in used
+ */
+global $HOMEPAGE;
+$HOMEPAGE = 'index';
+
 
 
 
