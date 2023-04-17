@@ -10,6 +10,7 @@ use Datainterface\Query;
 use Datainterface\SecurityChecker;
 use Datainterface\Selection;
 use Datainterface\Updating;
+use ErrorLogger\ErrorLogger;
 use GlobalsFunctions\Globals;
 
 class Robot
@@ -135,54 +136,61 @@ class Robot
       if(!SecurityChecker::isConfigExist()){
           return false;
       }
-      $groups = self::grouping();
-      $host = Globals::protocal().'://'.Globals::serverHost().'/'.Globals::home();
-      $sitemap = Globals::sitemap();
+      try {
+          $groups = self::grouping();
+          $host = Globals::protocal().'://'.Globals::serverHost().'/'.Globals::home();
+          $sitemap = Globals::sitemap();
 
-      $allowedSection = [];
-      $disAllowedSection = [];
+          $allowedSection = [];
+          $disAllowedSection = [];
 
-      foreach ($groups['allowed'] as $key=>$value){
-          if(gettype($value) === 'array'){
-              $allowedSection[] = trim('Allow: /'.$value['viewUrl'] ?? 'Allow: '.$host);
+          foreach ($groups['allowed'] as $key=>$value){
+              if(gettype($value) === 'array'){
+                  $allowedSection[] = trim('Allow: /'.$value['viewUrl'] ?? 'Allow: '.$host);
+              }
           }
-      }
-      foreach ($groups['disallowed'] as $key=>$value){
-          if(gettype($value) === 'array'){
-              $disAllowedSection[] = trim('Disallow: /'.$value['viewUrl'] ?? 'Disallow: '.$host);
+          foreach ($groups['disallowed'] as $key=>$value){
+              if(gettype($value) === 'array'){
+                  $disAllowedSection[] = trim('Disallow: /'.$value['viewUrl'] ?? 'Disallow: '.$host);
+              }
           }
+
+          $content = "# This applies that all client need to follows these rules\nUser-agent: *\n# This is disallowed section that means directories and files that dont need to be crawled\nDisallow: /Core/\nDisallow: /Backups/\nDisallow: /Files/\nDisallow: /Json-store/\nDisallow: /vendor/\nDisallow: /Views/\nDisallow: /Views/DefaultViews/\nDisallow: /Js/\nDisallow: /assets/\nDisallow: /Backups/\nDisallow: /settings.php\nDisallow: /index.php\nDisallow: /composer.json\nDisallow: /composer.lock\nDisallow: /README.md\nDisallow: /.gitIgnore\nDisallow: /.htaccess\n";
+
+          if(file_exists($_SERVER['DOCUMENT_ROOT'].'/robots.txt')){
+              file_put_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt', '');
+          }
+          file_put_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt', $content);
+          $handler = fopen($_SERVER['DOCUMENT_ROOT'].'/robots.txt','a');
+
+          foreach ($disAllowedSection as $key=>$value){
+              fwrite($handler,"{$value}\n");
+          }
+          fclose($handler);
+
+          $content = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt');
+          $content .= "\n# This is allowed section which might override above disallowed\n";
+          file_put_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt', $content);
+
+          $handler = fopen($_SERVER['DOCUMENT_ROOT'].'/robots.txt','a');
+          foreach ($allowedSection as $key=>$value){
+              fwrite($handler,"{$value}\n");
+          }
+          fclose($handler);
+
+          $content = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt');
+          $content .= "\n# This is sitemap location indicator\nSitemap: {$host}/{$sitemap}\n";
+          return file_put_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt', $content);
+      }catch (\TypeError $e){
+          ErrorLogger::log($e);
       }
-
-      $content = "# This applies that all client need to follows these rules\nUser-agent: *\n# This is disallowed section that means directories and files that dont need to be crawled\nDisallow: /Core/\nDisallow: /Backups/\nDisallow: /Files/\nDisallow: /Json-store/\nDisallow: /vendor/\nDisallow: /Views/\nDisallow: /Views/DefaultViews/\nDisallow: /Js/\nDisallow: /assets/\nDisallow: /Backups/\nDisallow: /settings.php\nDisallow: /index.php\nDisallow: /composer.json\nDisallow: /composer.lock\nDisallow: /README.md\nDisallow: /.gitIgnore\nDisallow: /.htaccess\n";
-
-      if(file_exists($_SERVER['DOCUMENT_ROOT'].'/robots.txt')){
-          file_put_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt', '');
-      }
-      file_put_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt', $content);
-      $handler = fopen($_SERVER['DOCUMENT_ROOT'].'/robots.txt','a');
-
-      foreach ($disAllowedSection as $key=>$value){
-          fwrite($handler,"{$value}\n");
-      }
-      fclose($handler);
-
-      $content = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt');
-      $content .= "\n# This is allowed section which might override above disallowed\n";
-      file_put_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt', $content);
-
-      $handler = fopen($_SERVER['DOCUMENT_ROOT'].'/robots.txt','a');
-      foreach ($allowedSection as $key=>$value){
-          fwrite($handler,"{$value}\n");
-      }
-      fclose($handler);
-
-      $content = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt');
-      $content .= "\n# This is sitemap location indicator\nSitemap: {$host}/{$sitemap}\n";
-      return file_put_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt', $content);
   }
 
   public static function robotFileCreation($privateDefault = false){
       if(!SecurityChecker::isConfigExist()){
+          return;
+      }
+      if(Database::database() === null){
           return;
       }
       $views = new RouteConfiguration();
