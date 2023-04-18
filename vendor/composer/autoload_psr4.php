@@ -38,6 +38,7 @@ return array(
     'Curls\\' => array($baseDir . '/Core/Curl'),
     'CrudClassCollection\\' => array($baseDir . '/Core/Datainterface'),
     'Core\\' => array($baseDir . '/Core/Router/RouterController'),
+    'ContentType\\' => array($baseDir . '/Core/ContentType'),
     'ConfigurationSetting\\' => array($baseDir . '/Core/ConfigurationSetting'),
     'Commerce\\' => array($baseDir . '/Core/Commerce'),
     'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),

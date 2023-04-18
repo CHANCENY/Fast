@@ -78,6 +78,7 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
             'Curls\\' => 6,
             'CrudClassCollection\\' => 20,
             'Core\\' => 5,
+            'ContentType\\' => 12,
             'ConfigurationSetting\\' => 21,
             'Commerce\\' => 9,
         ),
@@ -221,6 +222,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         'Core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Core/Router/RouterController',
+        ),
+        'ContentType\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Core/ContentType',
         ),
         'ConfigurationSetting\\' => 
         array (
