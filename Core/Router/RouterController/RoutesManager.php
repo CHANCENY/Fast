@@ -2,6 +2,7 @@
 
 namespace RoutesManager;
 
+use Core\Router;
 use Datainterface\Database;
 use Datainterface\Delete;
 use Datainterface\Insertion;
@@ -189,6 +190,16 @@ class RoutesManager
             }
             $_SESSION['viewsstorage'] = $temp;
         }
+    }
+
+    public function writeInTemps($data){
+        $base = $_SERVER['DOCUMENT_ROOT'].'/Core/Router/Register/registered_path_available.json';
+        if(!chmod($base, 0777)){
+            return;
+        }
+        $content = json_decode(Router::clearUrl(file_get_contents($base)),true);
+        $content[] = $data;
+        return file_put_contents($base, json_encode($content));
     }
 
 }
