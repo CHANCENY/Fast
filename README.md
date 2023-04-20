@@ -10,7 +10,7 @@
 > * All views created will be located in Views directory
 > * Mandatory views to have in Views folder
 >   * nav.view.php
->   * footer.php
+>   * footer.view.php
 > * You must have a view having the following property in Views folder. This will be used as home page
 >   * url: index
 > * To create view always use build-in form
