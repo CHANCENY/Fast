@@ -146,6 +146,9 @@ class RouteConfiguration
             ];
 
             if(!$this->manager->saveRoute($viewFormat)->error){
+                if(isset($viewData['default'])){
+                    $this->manager->writeInTemps($viewFormat);
+                }
                  return $this->manager->getMessage();
             }
             return $this->manager->getMessage();

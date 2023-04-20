@@ -34,6 +34,7 @@ if(\GlobalsFunctions\Globals::method() === 'POST'){
     if(isset($_POST['save-definition-content-type'])){
         $content = new \ContentType\ContentType();
         $content->sortNewContentFieldsDefinitions($_POST)->saveContentTypeDefinitions();
+        echo \Alerts\Alerts::alert('info', $content->message);
     }
 }
 ?>
