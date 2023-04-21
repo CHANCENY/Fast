@@ -155,6 +155,18 @@ class ContentType
         if(Database::database() === null){
             return false;
         }
+
+        $columns = ['coid', 'content_type','form_layout'];
+        $attributes = ['coid'=>['int(11)', 'auto_increment','primary key'],
+            'form_layout'=>['text'],
+            'content_type'=>['varchar(100)', 'not null']];
+
+        $maker = new MysqlDynamicTables();
+        $maker->resolver(Database::database(), $columns, $attributes,'content_type_form_storage',false );
+        if(!empty(Selection::selectById('content_type_form_storage',['content_type'=>$this->contentTypeName]))){
+            $this->message = "Content type $this->contentTypeName already exist";
+            return false;
+        }
         if(empty($this->message)){
             $maker = new MysqlDynamicTables();
             if($this->createContentTypeForm()){
@@ -179,20 +191,32 @@ class ContentType
                         $line = "<input type='number' name='$column' class='form-control' id='{$column}-id' $required/>";
                         $form[] = str_replace('@input',$line, $div);
                     }
-                    if (strstr($attribute[0], 'varchar')){
+                    if ($attribute[0] === 'varchar(100)'){
                         $required = isset($attribute[1]) ? $attribute[1] === "not null" ? "required" : "" : "";
-                        $line = "<input type='text' name='$column' class='form-control' id='{$column}-id' $required/>";
+                        $line = "<input type='text' name='$column' class='form-control {$column}-bool-class' id='{$column}-short-id' $required/>";
                         $form[] = str_replace('@input',$line, $div);
                     }
                     if (strstr($attribute[0], 'text')){
                         $required = isset($attribute[1]) ? $attribute[1] === "not null" ? "required" : "" : "";
-                        $line  = "<textarea type='text' name='$column' cols='10' rows='10' class='form-control' id='{$column}-id' $required></textarea>";
+                        $line  = "<textarea type='text' name='$column' cols='10' rows='10' class='form-control {$column}-bool-class' id='{$column}-text-id' $required></textarea>";
                         $form[] = str_replace('@input',$line, $div);
                     }
                     if (strstr($attribute[0], 'bool')){
                         $required = isset($attribute[1]) ? $attribute[1] === "not null" ? "required" : "" : "";
-                        $line = "<input type='checkbox' name='$column' class='{$column}-class' id='{$column}-id' $required/>";
+                        $line = "<input type='checkbox' name='$column' class='{$column}-bool-class' id='{$column}-bool-id' $required/>";
                         $form[] = str_replace('@input',$line, $div);
+                    }
+                    if (strstr($attribute[0], 'LONGBLOB')){
+                        $required = isset($attribute[1]) ? $attribute[1] === "not null" ? "required" : "" : "";
+                        $line = "<input type='file' name='{$column}[]' class='form-control {$column}-file-class' id='{$column}-file-id' $required multiple/>";
+                        $form[] = str_replace('@input',$line, $div);
+                    }
+                    if ($attribute[0] === 'varchar(50)'){
+                        $required = isset($attribute[1]) ? $attribute[1] === "not null" ? "required" : "" : "";
+                        $sel = "<select name='$column' id='{$column}-1' class='form-control {$column}-select-class'>
+                                 <option value=''>--Select {$column}--</option>
+                               </select>";
+                        $form[] = str_replace('@input',$sel, $div);
                     }
                 }
             }
@@ -201,6 +225,7 @@ class ContentType
             $this->formLayout = $form;
             $formLayout = "<div class='mt-5 w-100'>
                               <div class='bg-light rounded shadow border'>
+                                 <h2 id='{$this->contentTypeName}-title-id'></h2>
                                  <form action='#' method='POST' class='forms p-5' id='form-$this->contentTypeName'>
                                   $line
                                   <button class='btn btn-primary bg-primary border-primary d-block mt-3' type='submit' id='{$this->contentTypeName}-btn-id'> Submit</button>
