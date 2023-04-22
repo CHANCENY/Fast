@@ -106,6 +106,7 @@ class ContentType
         $this->fields = array();
         $this->selectOptionContentTypeLinks = array();
         $this->message = "";
+        $this->relatedAdded = false;
     }
 
     public function makeOptionLinker(){
@@ -138,7 +139,7 @@ class ContentType
 
     public function sortNewContentFieldsDefinitions($incomingData) {
         $this->setContentTypeName(str_replace(' ','_', htmlspecialchars(strip_tags($incomingData['content-type-name']))));
-        $id = substr($incomingData['content-type-name'], 0, 2).'_id';
+        $id = substr($incomingData['content-type-name'], 0, 2).'Id';
         $this->setFields("{$id}");
         $this->setDefinitionAttributes($id,['int(11)','primary key', 'auto_increment']);
         $total = $incomingData["total-fields"];
@@ -255,14 +256,14 @@ class ContentType
             $line = implode(' ',   $form);
             $this->formLayout = $form;
             $base = Globals::protocal().'://'.Globals::serverHost().'/'.Globals::home();
-            $enctype = $fileFlag === true ? "enctype=multipart/form-data" : "";
+            $enctype = $fileFlag === true ? '"enctype=multipart/form-data"' : "";
             $formLayout = "<div class='mt-5 w-100' id='layout-content-form' data-call='{$base}'>
                               <div class='bg-light rounded shadow border'>
                                  <h2 id='{$this->contentTypeName}-title-id'></h2>
                                  <form action='#' method='POST' class='forms p-5' id='form-$this->contentTypeName' {$enctype}>
                                   $line
                                   @related
-                                  <button class='btn btn-primary bg-primary border-primary d-block mt-3' type='submit' id='{$this->contentTypeName}-btn-id'> Submit</button>
+                                  <button name='{$this->contentTypeName}-btn-submit' class='btn btn-primary bg-primary border-primary d-block mt-3' type='submit' id='{$this->contentTypeName}-btn-id'> Submit</button>
                                  </form>
                               </div>
                             </div><div><script type='application/javascript'>@js</script></div>";
