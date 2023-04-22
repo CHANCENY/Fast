@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'formFunction\\' => array($baseDir . '/includes'),
     'UI\\' => array($baseDir . '/Core/UI'),
     'Svg\\' => array($vendorDir . '/phenx/php-svg-lib/src/Svg'),
     'Sessions\\' => array($baseDir . '/Core/Sessions'),

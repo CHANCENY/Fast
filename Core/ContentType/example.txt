@@ -1,0 +1,13 @@
+$query = "SELECT * FROM @table"; @breakLine
+$result = Query::query($query); @breakLine
+$arrayReturns = []; @breakLine
+foreach ($result as $key=>$value){ @breakLine
+    if(gettype($value) === 'array'){ @breakLine
+        $keys = array_keys($value); @breakLine
+        $arrayReturns[] = [ @breakLine
+            'text' => $value['@varcharString'], @breakLine
+            'value' => $value['@relatedColumn'] @breakLine
+        ]; @breakLine
+    } @breakLine
+} @breakLine
+return $arrayReturns;
