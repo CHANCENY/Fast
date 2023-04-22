@@ -17,7 +17,7 @@ class ConfigureSetting
    }
 
    public static function getDatabaseConfig(){
-       $base = $_SERVER['DOCUMENT_ROOT'].'/Core/ConfigurationSetting/basesetting.json';
+       $base = $_SERVER['DOCUMENT_ROOT'].'/config/basesetting.json';
        if(file_exists($base)){
            return json_decode(file_get_contents($base), true);
        }

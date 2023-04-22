@@ -24,8 +24,11 @@ class Installation
            "password"=>empty(htmlspecialchars(strip_tags($data['password']))) ? NULL : htmlspecialchars(strip_tags($data['password'])),
            "dbname"=>htmlspecialchars(strip_tags($data['dbname']))
        ];
-
-       $file = $_SERVER['DOCUMENT_ROOT'].'/Core/ConfigurationSetting/basesetting.json';
-       return file_put_contents($file, json_encode($data)) !== null;
+       if(!is_dir($_SERVER['DOCUMENT_ROOT'].'/config/')){
+           mkdir($_SERVER['DOCUMENT_ROOT'].'/config/', 0777, true);
+       }
+       if(chmod($_SERVER['DOCUMENT_ROOT'].'/config/', 0777)){
+           return file_put_contents($_SERVER['DOCUMENT_ROOT'].'/config/basesetting.json', json_encode($data)) !== null;
+       }
    }
 }
