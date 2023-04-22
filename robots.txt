@@ -37,6 +37,7 @@ Allow: /index
 Allow: /default-index
 Allow: /default
 Allow: /chance
+Allow: /cont-test
 
 # This is sitemap location indicator
 Sitemap: http://localhost/developement/

@@ -6,8 +6,10 @@ use Datainterface\Database;
 use Datainterface\Insertion;
 use Datainterface\mysql\TablesLayer;
 use Datainterface\MysqlDynamicTables;
+use Datainterface\Query;
 use Datainterface\SecurityChecker;
 use Datainterface\Selection;
+use GlobalsFunctions\Globals;
 
 class ContentType
 {
@@ -18,6 +20,30 @@ class ContentType
     public string $message;
 
     private array $formLayout;
+
+    private bool $relatedAdded;
+
+    private string $relatedId;
+
+    private string $relatedFiled;
+
+    private array $relatedDefinition;
+
+    /**
+     * @return bool
+     */
+    public function isRelatedAdded(): bool
+    {
+        return $this->relatedAdded;
+    }
+
+    /**
+     * @param bool $relatedAdded
+     */
+    public function setRelatedAdded(bool $relatedAdded): void
+    {
+        $this->relatedAdded = $relatedAdded;
+    }
 
     /**
      * @return array
@@ -142,8 +168,10 @@ class ContentType
                     }
                 }
             }
-            $this->setFields(end($list));
-            $this->setDefinitionAttributes(end($list), $schema);
+            $this->relatedFiled = str_replace('@', '_', $related);
+            $this->relatedDefinition = [str_replace('@', '_', $related) => $schema];
+            $this->setRelatedAdded(true);
+            $this->relatedId = $this->contentTypeName.'_'.$this->relatedFiled;
         }
         return $this;
     }
@@ -170,6 +198,7 @@ class ContentType
         if(empty($this->message)){
             $maker = new MysqlDynamicTables();
             if($this->createContentTypeForm()){
+                $this->addRelatedCallBacks();
                 $this->message = "Content type created";
                 return $maker->resolver(Database::database(), $this->fields, $this->definitionAttributes, $this->contentTypeName, false);
             }
@@ -180,6 +209,7 @@ class ContentType
     public function createContentTypeForm(){
         if(!empty($this->definitionAttributes)){
             $form = [];
+            $fileFlag = false;
             foreach ($this->definitionAttributes as $column=>$attribute){
                 $div = "<div class='form-group mt-3'><label>".ucfirst(str_replace('_', ' ', $column))."</label>@input</div>";
                 if(gettype($attribute)){
@@ -207,6 +237,7 @@ class ContentType
                         $form[] = str_replace('@input',$line, $div);
                     }
                     if (strstr($attribute[0], 'LONGBLOB')){
+                        $fileFlag = true;
                         $required = isset($attribute[1]) ? $attribute[1] === "not null" ? "required" : "" : "";
                         $line = "<input type='file' name='{$column}[]' class='form-control {$column}-file-class' id='{$column}-file-id' $required multiple/>";
                         $form[] = str_replace('@input',$line, $div);
@@ -223,15 +254,38 @@ class ContentType
 
             $line = implode(' ',   $form);
             $this->formLayout = $form;
-            $formLayout = "<div class='mt-5 w-100'>
+            $base = Globals::protocal().'://'.Globals::serverHost().'/'.Globals::home();
+            $enctype = $fileFlag === true ? "enctype=multipart/form-data" : "";
+            $formLayout = "<div class='mt-5 w-100' id='layout-content-form' data-call='{$base}'>
                               <div class='bg-light rounded shadow border'>
                                  <h2 id='{$this->contentTypeName}-title-id'></h2>
-                                 <form action='#' method='POST' class='forms p-5' id='form-$this->contentTypeName'>
+                                 <form action='#' method='POST' class='forms p-5' id='form-$this->contentTypeName' {$enctype}>
                                   $line
+                                  @related
                                   <button class='btn btn-primary bg-primary border-primary d-block mt-3' type='submit' id='{$this->contentTypeName}-btn-id'> Submit</button>
                                  </form>
                               </div>
-                            </div>";
+                            </div><div><script type='application/javascript'>@js</script></div>";
+            if($this->relatedAdded === true){
+                $label = ucfirst(str_replace('_',' ',$this->relatedFiled));
+                $relatedTag = "<div class='form-group mt-3'> <label for='$this->relatedId'>$label</label><select class='form-control' id='{$this->relatedId}' name='{$this->relatedFiled}'>@option</select></div>";
+                $option = "<option value=''>--Select--</option>";
+                $relatedTag  = str_replace("@option",$option, $relatedTag);
+                $formLayout = str_replace("@related", $relatedTag, $formLayout);
+                $this->setFields($this->relatedFiled);
+                $this->setDefinitionAttributes($this->relatedFiled, $this->relatedDefinition[$this->relatedFiled]);
+                $js = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/Core/ContentType/example2.js');
+                if(!empty($js)){
+                    $js = str_replace('@id',$this->relatedId, $js);
+                    $js = str_replace('@contentType',$this->contentTypeName, $js);
+                    $formLayout = str_replace('@js', $js, $formLayout);
+                }else{
+                    $formLayout = str_replace('@js', "let i = 0;", $formLayout);
+                }
+            }else{
+                $formLayout = str_replace('@js', "let i = 0;", $formLayout);
+                $formLayout = str_replace('@related', "&nbsp;", $formLayout);
+            }
 
             $columns = ['coid', 'content_type','form_layout'];
             $attributes = ['coid'=>['int(11)', 'auto_increment','primary key'],
@@ -265,6 +319,66 @@ class ContentType
         }
         return Selection::selectById('content_type_form_storage',['content_type'=>str_replace(' ','_', $contentTypeName)]);
 
+    }
+
+    private function addRelatedCallBacks(){
+        if($this->relatedAdded === true){
+            $tableColumn = end($this->fields);
+            $definition = $this->definitionAttributes[$tableColumn];
+            $breakLine = PHP_EOL;
+            $base = $_SERVER['DOCUMENT_ROOT'].'/includes/formFunction.inc';
+            $content = "<?php {$breakLine}/**{$breakLine}*Functions that handlers related Field added to any form using Content Type creation{$breakLine}*/{$breakLine}namespace formFunction;{$breakLine}use Datainterface\Query;";
+            if(!file_exists($base)){
+                $list = explode('/', $base);
+                $dir = implode('/', array_slice($list, 0, count($list) - 1));
+                if(mkdir($dir,0777, true)){
+                   file_put_contents($base, $content);
+                }
+            }else{
+                $d = file_get_contents($base);
+                if(empty($d)){
+                    file_put_contents($base, $content);
+                }
+            }
+
+            $content = file_get_contents($base);
+
+            $list = explode('_', $tableColumn);
+            $tableLayer = new TablesLayer();
+            $achemas = $tableLayer->getSchemas()->schema();
+            $thisTableSchema = $achemas[$list[0]];
+            $varcharFieldFound = "";
+
+            if(!empty($thisTableSchema)){
+                $to = ['100','50', '200','250'];
+                $counter = 0;
+                top:
+                foreach ($thisTableSchema as $key=>$value){
+                    if(gettype($value) === 'array'){
+                        if($value['Type'] === "varchar({$to[$counter]})" &&
+                            !str_contains(strtolower($value['Field']), 'password')
+                            && !str_contains(strtolower($value['Field']), 'username')
+                            && !str_contains(strtolower($value['Field']), 'mail')){
+                           $varcharFieldFound = $value['Field'];
+                        }
+                    }
+                }
+                if(empty($varcharFieldFound)){
+                    $counter = $counter + 1;
+                    goto top;
+                }
+            }
+            $functionName = strtolower($this->contentTypeName);
+            $contentPHP = "function {$functionName}(){ {$breakLine} @code {$breakLine} }";
+            $code = file_get_contents($_SERVER['DOCUMENT_ROOT'].'/Core/ContentType/example.txt');
+            $replace = ["@table","@varcharString","@relatedColumn", "@breakLine"];
+            $values = [$list[0], $varcharFieldFound, end($list), $breakLine];
+            $code = str_replace($replace,$values,$code);
+            $contentPHP = str_replace("@code",$code, $contentPHP);
+
+            $oldFunction = file_get_contents($base);
+            return file_put_contents($base, $oldFunction.$breakLine.$breakLine.$contentPHP);
+        }
     }
 
 

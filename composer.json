@@ -44,7 +44,8 @@
             "Datainterface\\mysql\\": "Core/Datainterface/mysql/",
             "Robot\\": "Core/Robot/",
             "RoutesManager\\": "Core/Router/RouterController/",
-            "ContentType\\": "Core/ContentType/"
+            "ContentType\\": "Core/ContentType/",
+            "formFunction\\" : "includes/"
         }
     }
 }
