@@ -14,6 +14,8 @@ if(!empty(\GlobalsFunctions\Globals::get('total-fields')) && !empty(\GlobalsFunc
                           <option value='int(11)'>Number</option>
                           <option value='varchar(100)'>Short Text</option>
                           <option value='text'>Long Text</option>
+                           <option value='LONGBLOB'>File</option>
+                           <option value='varchar(50)'>Select</option>
                           <option value='bool'>True/False</option>
                         </select>
                         <div class='form-group mt-3'>
