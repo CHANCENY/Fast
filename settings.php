@@ -86,6 +86,3 @@ $HOMEPAGE = 'index';
 if(file_exists("includes/formFunction.inc")){
     include_once "includes/formFunction.inc";
 }
-
-
-
