@@ -3,7 +3,7 @@
         'name' => 'nyasu/htdocs',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'b20dd9e63e3def8e10a8749ce81b65518302bb32',
+        'reference' => 'a38a90c7f363c48c122d1d315f1bb967c93ac30a',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -49,7 +49,7 @@
         'nyasu/htdocs' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'b20dd9e63e3def8e10a8749ce81b65518302bb32',
+            'reference' => 'a38a90c7f363c48c122d1d315f1bb967c93ac30a',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
