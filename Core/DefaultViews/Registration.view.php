@@ -1,4 +1,7 @@
 <?php
+
+use GlobalsFunctions\Globals;
+
 @session_start();
 
 $countries = \Modules\CountriesModular::getAllCountries();
@@ -21,7 +24,10 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
        $address = $country.', '.htmlspecialchars(strip_tags($_POST['state'])).', '.
            htmlspecialchars(strip_tags($_POST['city'])).', '.htmlspecialchars(strip_tags($_POST['zip']));
        $site = \Sessions\SessionManager::getSession('site');
-
+        $defaultImage[]  = Globals::protocal().'://'.Globals::serverHost().
+            Globals::home().'/Files/profile_default2.jpg';
+        $defaultImage[]  = Globals::protocal().'://'.Globals::serverHost().
+            Globals::home().'/Files/profile_default.avif';
         $data = [
                 "firstname"=>htmlspecialchars(strip_tags($_POST['firstname'])),
                 "lastname"=>htmlspecialchars(strip_tags($_POST['lastname'])),
@@ -29,7 +35,8 @@ if($_SERVER['REQUEST_METHOD'] === "POST"){
                "password"=>htmlspecialchars($_POST['password']),
                "phone"=>htmlspecialchars(strip_tags($_POST['phone'])),
                "address"=>$address,
-               "role"=> $site === false ? "Admin" : "user"
+               "role"=> $site === false ? "Admin" : "user",
+               "image" => $defaultImage[random_int(0,1)]
         ];
 
         $check = \Datainterface\Selection::selectById('users', ['mail'=>htmlspecialchars(strip_tags($_POST['email']))]);

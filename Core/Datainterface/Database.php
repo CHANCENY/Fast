@@ -128,7 +128,7 @@ class Database
        $routes->installerViewDefaults();
 
        $maker = new MysqlDynamicTables();
-       $columns = ['uid','firstname','lastname','mail','phone','password','address','role','verified','blocked'];
+       $columns = ['uid','firstname','lastname','mail','phone','password','address','role','verified','blocked','image'];
        $attributes = [
          'uid'=>['INT(11)','AUTO_INCREMENT','PRIMARY KEY'],
          'firstname'=>['VARCHAR(100)','NOT NULL'],
@@ -139,7 +139,8 @@ class Database
          'address'=>['TEXT','NULL'],
          'role'=>['VARCHAR(20)','NOT NULL'],
            'verified'=>['BOOLEAN'],
-           'blocked'=>['BOOLEAN']
+           'blocked'=>['BOOLEAN'],
+           'image'=>['varchar(250)', 'null']
        ];
 
        $maker->resolver($con,$columns,$attributes,'users',false);

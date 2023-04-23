@@ -59,8 +59,8 @@ $base = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
                                 <strong><?php echo $post['post_title']; ?></strong>
                             </h5>
                             <p class="mbr-text mbr-fonts-style display-4"><?php echo $post['post_body']; ?></p>
-                            <i id="like-post-id-<?php echo $post['poid']; ?>" data-owner="<?php echo $post['uid']; ?>" data-post="<?php echo $post['post_uuid']; ?>" class="mobi-mbri-like m-3"><?php echo \UI\Comments::getLikeCount($post['post_uuid']); ?></i>
-                            <i id="comment-post-id-<?php echo $post['poid']; ?>"  data-owner="<?php echo $post['uid']; ?>" data-post="<?php echo $post['post_uuid']; ?>" class="mobi-mbri-chat"><?php echo \UI\Comments::getCommentsCount($post['post_uuid']); ?></i>
+                            <i id="like-post-id-<?php echo $post['poid']; ?>" data-owner="<?php echo \GlobalsFunctions\Globals::user()[0]['uid']; ?>" data-post="<?php echo $post['post_uuid']; ?>" class="mobi-mbri-like m-3"><?php echo \UI\Comments::getLikeCount($post['post_uuid']); ?></i>
+                            <i id="comment-post-id-<?php echo $post['poid']; ?>"  data-owner="<?php echo \GlobalsFunctions\Globals::user()[0]['uid']; ?>" data-post="<?php echo $post['post_uuid']; ?>" class="mobi-mbri-chat"><?php echo \UI\Comments::getCommentsCount($post['post_uuid']); ?></i>
                         </blockquote>
                         <div id="comment-section-box-<?php echo $post['poid']; ?>"></div>
                     <?php endforeach; ?>
