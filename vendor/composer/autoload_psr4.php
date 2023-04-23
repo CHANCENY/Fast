@@ -21,6 +21,7 @@ return array(
     'Modules\\' => array($baseDir . '/Core/Modules'),
     'MiddlewareSecurity\\' => array($baseDir . '/Core/Middleware'),
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
+    'Markdown\\' => array($baseDir . '/Core/Markdown'),
     'Manipulator\\' => array($baseDir . '/Views/DefaultViews'),
     'Mailling\\' => array($baseDir . '/Core/Mailling'),
     'Json\\' => array($baseDir . '/Core/Json'),
