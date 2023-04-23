@@ -85,24 +85,30 @@ class FakerUsers
       $col = $schema['col'];
       $finalUserCopy = [];
 
+      $defaultImage[]  = Globals::protocal().'://'.Globals::serverHost().
+          '/'.Globals::home().'/Files/profile_default2.jpg';
+      $defaultImage[]  = Globals::protocal().'://'.Globals::serverHost().
+          '/'.Globals::home().'/Files/profile_default.avif';
+
       $blocked = [false, true];
       foreach ($users as $user=>$value){
           $item[$col[1]]=$value[2];
           $item[$col[2]]=$value[3];
           $item[$col[3]]=$value[5];
           $item[$col[4]]=$value[6];
-          $item[$col[5]]='secret@123';
+          $item[$col[5]]= password_hash('secret@123',  PASSWORD_BCRYPT);
           $item[$col[6]]='no address';
           $item[$col[7]]='user';
           $item[$col[8]]= true;
           $item[$col[9]]= $blocked[random_int(0,1)];
+          $item[$col[10]] = $defaultImage[random_int(0,1)];
           $finalUserCopy[] = $item;
       }
       return $finalUserCopy;
   }
 
   public static function userSchema(){
-      $columns = ['uid','firstname','lastname','mail','phone','password','address','role','verified','blocked'];
+      $columns = ['uid','firstname','lastname','mail','phone','password','address','role','verified','blocked','image'];
       $attributes = [
           'uid'=>['INT(11)','AUTO_INCREMENT','PRIMARY KEY'],
           'firstname'=>['VARCHAR(100)','NOT NULL'],
@@ -113,7 +119,8 @@ class FakerUsers
           'address'=>['TEXT','NULL'],
           'role'=>['VARCHAR(20)','NOT NULL'],
           'verified'=>['BOOLEAN'],
-          'blocked'=>['BOOLEAN']
+          'blocked'=>['BOOLEAN'],
+          'image'=>['varchar(250)', 'null']
       ];
       return ['col'=>$columns, 'att'=>$attributes];
   }
