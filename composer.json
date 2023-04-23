@@ -11,7 +11,8 @@
     "require": {
         "phpmailer/phpmailer": "^6.7",
         "dompdf/dompdf": "^2.0",
-        "ramsey/uuid": "^4.7"
+        "ramsey/uuid": "^4.7",
+        "erusev/parsedown": "^1.7"
     },
     "autoload": {
         "psr-4": {
@@ -45,7 +46,9 @@
             "Robot\\": "Core/Robot/",
             "RoutesManager\\": "Core/Router/RouterController/",
             "ContentType\\": "Core/ContentType/",
-            "formFunction\\" : "includes/"
+            "formFunction\\" : "includes/",
+            "Markdown\\" : "Core/Markdown/"
+
         }
     }
 }

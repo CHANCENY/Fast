@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'nyasu/htdocs',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => 'af84242002da99e206d1daafc259156a01d3565b',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => 'b20dd9e63e3def8e10a8749ce81b65518302bb32',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -28,6 +28,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'erusev/parsedown' => array(
+            'pretty_version' => '1.7.4',
+            'version' => '1.7.4.0',
+            'reference' => 'cb17b6477dfff935958ba01325f2e8a2bfa6dab3',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../erusev/parsedown',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'masterminds/html5' => array(
             'pretty_version' => '2.7.6',
             'version' => '2.7.6.0',
@@ -38,9 +47,9 @@
             'dev_requirement' => false,
         ),
         'nyasu/htdocs' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => 'af84242002da99e206d1daafc259156a01d3565b',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => 'b20dd9e63e3def8e10a8749ce81b65518302bb32',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

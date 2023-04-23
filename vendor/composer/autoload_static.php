@@ -43,6 +43,7 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
             'Modules\\' => 8,
             'MiddlewareSecurity\\' => 19,
             'Masterminds\\' => 12,
+            'Markdown\\' => 9,
             'Manipulator\\' => 12,
             'Mailling\\' => 9,
         ),
@@ -159,6 +160,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
         ),
+        'Markdown\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Core/Markdown',
+        ),
         'Manipulator\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Views/DefaultViews',
@@ -261,6 +266,16 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         ),
     );
 
+    public static $prefixesPsr0 = array (
+        'P' => 
+        array (
+            'Parsedown' => 
+            array (
+                0 => __DIR__ . '/..' . '/erusev/parsedown',
+            ),
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Dompdf\\Cpdf' => __DIR__ . '/..' . '/dompdf/dompdf/lib/Cpdf.php',
@@ -271,6 +286,7 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit1dba5613abded84caabc95765f21e30a::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit1dba5613abded84caabc95765f21e30a::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit1dba5613abded84caabc95765f21e30a::$prefixesPsr0;
             $loader->classMap = ComposerStaticInit1dba5613abded84caabc95765f21e30a::$classMap;
 
         }, null, ClassLoader::class);
