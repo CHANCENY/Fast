@@ -134,7 +134,7 @@ class Database
          'firstname'=>['VARCHAR(100)','NOT NULL'],
          'lastname'=>['VARCHAR(100)', 'NOT NULL'],
          'mail'=>['VARCHAR(100)','NOT NULL'],
-         'phone'=>['VARCHAR(20)', 'NULL'],
+         'phone'=>['VARCHAR(50)', 'NULL'],
            'password'=>['VARCHAR(100)', 'NOT NULL'],
          'address'=>['TEXT','NULL'],
          'role'=>['VARCHAR(20)','NOT NULL'],
