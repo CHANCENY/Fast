@@ -29,7 +29,7 @@ class Comments
             'cid'=>['int(11)','auto_increment','primary key'],
             'comment_body'=>['text','not null'],
             'commentor_uid'=>['int(11)','not null'],
-            'post_id'=>['int(11)','not null'],
+            'post_id'=>['varchar(100)','not null'],
             'comment_title'=>['varchar(100)','null']
         ];
         return ['col'=>$columns, 'att'=>$attribute,'table'=>'comments'];
