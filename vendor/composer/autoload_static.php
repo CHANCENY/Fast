@@ -13,10 +13,12 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
     public static $prefixLengthsPsr4 = array (
         'f' => 
         array (
+            'functions\\' => 10,
             'formFunction\\' => 13,
         ),
         'U' => 
         array (
+            'User\\' => 5,
             'UI\\' => 3,
         ),
         'S' => 
@@ -100,9 +102,17 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
     );
 
     public static $prefixDirsPsr4 = array (
+        'functions\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/includes',
+        ),
         'formFunction\\' => 
         array (
             0 => __DIR__ . '/../..' . '/includes',
+        ),
+        'User\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Core/User',
         ),
         'UI\\' => 
         array (

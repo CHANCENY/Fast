@@ -47,7 +47,9 @@
             "RoutesManager\\": "Core/Router/RouterController/",
             "ContentType\\": "Core/ContentType/",
             "formFunction\\" : "includes/",
-            "Markdown\\" : "Core/Markdown/"
+            "Markdown\\" : "Core/Markdown/",
+            "functions\\" : "includes/",
+            "User\\" : "Core/User/"
 
         }
     }
