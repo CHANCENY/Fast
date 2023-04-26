@@ -49,7 +49,8 @@
             "formFunction\\" : "includes/",
             "Markdown\\" : "Core/Markdown/",
             "functions\\" : "includes/",
-            "User\\" : "Core/User/"
+            "User\\" : "Core/User/",
+            "Site\\" : "Core/Site/"
 
         }
     }

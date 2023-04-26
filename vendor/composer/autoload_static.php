@@ -24,6 +24,7 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         'S' => 
         array (
             'Svg\\' => 4,
+            'Site\\' => 5,
             'Sessions\\' => 9,
             'Sabberworm\\CSS\\' => 15,
         ),
@@ -121,6 +122,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         'Svg\\' => 
         array (
             0 => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg',
+        ),
+        'Site\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Core/Site',
         ),
         'Sessions\\' => 
         array (

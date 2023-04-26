@@ -213,9 +213,6 @@ $base = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
                 commentSectionTag.appendChild(formDiv);
             }
 
-
-
-
         }
 
         const refreshDom = (idTag, data)=>{

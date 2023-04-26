@@ -11,6 +11,7 @@ return array(
     'User\\' => array($baseDir . '/Core/User'),
     'UI\\' => array($baseDir . '/Core/UI'),
     'Svg\\' => array($vendorDir . '/phenx/php-svg-lib/src/Svg'),
+    'Site\\' => array($baseDir . '/Core/Site'),
     'Sessions\\' => array($baseDir . '/Core/Sessions'),
     'Sabberworm\\CSS\\' => array($vendorDir . '/sabberworm/php-css-parser/src'),
     'RoutesManager\\' => array($baseDir . '/Core/Router/RouterController'),
