@@ -9,9 +9,9 @@
  * This is for errors to be displaying on page if enabled NOTE: alwalys comment this code when site is going
  * live
  */
-error_reporting(E_ALL);
-ini_set('display_errors', TRUE);
-ini_set('display_startup_errors', TRUE);
+//error_reporting(E_ALL);
+//ini_set('display_errors', TRUE);
+//ini_set('display_startup_errors', TRUE);
 
 /**
  * Enabling this setting will help your website in performance and also will make sure header dont get set without
@@ -85,4 +85,7 @@ $HOMEPAGE = 'index';
 
 if(file_exists("includes/formFunction.inc")){
     include_once "includes/formFunction.inc";
+}
+if(file_exists("includes/functions.inc")){
+    include_once "includes/functions.inc";
 }
