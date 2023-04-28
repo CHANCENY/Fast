@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'setasign\\Fpdi\\' => array($vendorDir . '/setasign/fpdi/src'),
     'functions\\' => array($baseDir . '/includes'),
     'formFunction\\' => array($baseDir . '/includes'),
     'User\\' => array($baseDir . '/Core/User'),
@@ -19,8 +20,11 @@ return array(
     'ResponseHandler\\' => array($baseDir . '/Core/ApiHandler'),
     'Ramsey\\Uuid\\' => array($vendorDir . '/ramsey/uuid/src'),
     'Ramsey\\Collection\\' => array($vendorDir . '/ramsey/collection/src'),
+    'Psr\\Log\\' => array($vendorDir . '/psr/log/src'),
+    'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
     'PDF\\' => array($baseDir . '/Core/PDF'),
+    'Mpdf\\' => array($vendorDir . '/mpdf/mpdf/src'),
     'Modules\\' => array($baseDir . '/Core/Modules'),
     'MiddlewareSecurity\\' => array($baseDir . '/Core/Middleware'),
     'Masterminds\\' => array($vendorDir . '/masterminds/html5/src'),
@@ -29,6 +33,7 @@ return array(
     'Mailling\\' => array($baseDir . '/Core/Mailling'),
     'Json\\' => array($baseDir . '/Core/Json'),
     'Installation\\' => array($baseDir . '/Core/Installation'),
+    'Http\\Message\\' => array($vendorDir . '/php-http/message-factory/src'),
     'GlobalsFunctions\\' => array($baseDir . '/Core/Globals'),
     'FormViewCreation\\' => array($baseDir . '/Core/Forms'),
     'FontLib\\' => array($vendorDir . '/phenx/php-font-lib/src/FontLib'),
@@ -37,6 +42,7 @@ return array(
     'ExcelHandler\\' => array($baseDir . '/Core/ExcelHandler'),
     'ErrorLogger\\' => array($baseDir . '/Core/ErrorLogger'),
     'Dompdf\\' => array($vendorDir . '/dompdf/dompdf/src'),
+    'DeepCopy\\' => array($vendorDir . '/myclabs/deep-copy/src/DeepCopy'),
     'Datainterface\\mysql\\' => array($baseDir . '/Core/Datainterface/mysql'),
     'Datainterface\\' => array($baseDir . '/Core/Datainterface'),
     'CustomInstallation\\' => array($baseDir . '/Core/CustomInstallation'),
