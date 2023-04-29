@@ -52,13 +52,19 @@ $base = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
     <section data-bs-version="5.1" class="content7 cid-tCeIefzkiv" id="content7-i" data-uid="<?php echo \GlobalsFunctions\Globals::user()[0]['uid']; ?>" data-base="<?php echo $base; ?>" data-comment="<?php echo implode(',', $ids); ?>">
         <div class="container-fluid mb-lg-5">
             <div class="row justify-content-center">
-                <div class="col-12 col-md-8">
+                <div class="col-12 col-md-8 bg-light">
                     <?php foreach($posts as $key=>$post): ?>
                         <blockquote>
-                            <h5 class="mbr-section-title mbr-fonts-style mb-2 display-7">
+                            <h5 class="mbr-section-title mbr-fonts-style mb-2 display-7 flex">
                                 <strong><?php echo $post['post_title']; ?></strong>
+                                <img class="float-lg-end border border-white" style="width: 50px; height: 50px; border-radius: 100%; display: inline-flex;" src="<?php echo \User\User::loadUser($post['uid'])['profileImage']; ?>" alt="<?php echo \User\User::loadUser($post['uid'])['profileImage']; ?>">
                             </h5>
                             <p class="mbr-text mbr-fonts-style display-4"><?php echo $post['post_body']; ?></p>
+                            <div class="ms-auto">
+                                <p><em>Posted <?php echo functions\to_time_ago($post['created']); ?></em><em>    By <?php
+                                        echo \User\User::loadUser($post['uid'])['firstname'];
+                                        ?></em></p>
+                            </div>
                             <i id="like-post-id-<?php echo $post['poid']; ?>" data-owner="<?php echo \GlobalsFunctions\Globals::user()[0]['uid']; ?>" data-post="<?php echo $post['post_uuid']; ?>" class="mobi-mbri-like m-3"><?php echo \UI\Comments::getLikeCount($post['post_uuid']); ?></i>
                             <i id="comment-post-id-<?php echo $post['poid']; ?>"  data-owner="<?php echo \GlobalsFunctions\Globals::user()[0]['uid']; ?>" data-post="<?php echo $post['post_uuid']; ?>" class="mobi-mbri-chat"><?php echo \UI\Comments::getCommentsCount($post['post_uuid']); ?></i>
                         </blockquote>
@@ -90,10 +96,6 @@ $base = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
                         <div class="col-md col-sm-12 form-group mb-3" data-for="name">
                             <input type="text" name="title" placeholder="Title" data-form-field="name" class="form-control" value="" id="name-form5-j">
                         </div>
-                        <div class="col-md col-sm-12 form-group mb-3" data-for="email">
-                            <input type="email" name="email" placeholder="E-mail" data-form-field="email" class="form-control" value="" id="email-form5-j">
-                        </div>
-
                         <div class="col-12 form-group mb-3" data-for="textarea">
                             <textarea name="textarea" placeholder="Thoughts" data-form-field="textarea" class="form-control" id="textarea-form5-j"></textarea>
                         </div>
