@@ -7,10 +7,15 @@ namespace Composer\Autoload;
 class ComposerStaticInit1dba5613abded84caabc95765f21e30a
 {
     public static $files = array (
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
+        's' => 
+        array (
+            'setasign\\Fpdi\\' => 14,
+        ),
         'f' => 
         array (
             'functions\\' => 10,
@@ -38,11 +43,14 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         ),
         'P' => 
         array (
+            'Psr\\Log\\' => 8,
+            'Psr\\Http\\Message\\' => 17,
             'PHPMailer\\PHPMailer\\' => 20,
             'PDF\\' => 4,
         ),
         'M' => 
         array (
+            'Mpdf\\' => 5,
             'Modules\\' => 8,
             'MiddlewareSecurity\\' => 19,
             'Masterminds\\' => 12,
@@ -57,6 +65,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         'I' => 
         array (
             'Installation\\' => 13,
+        ),
+        'H' => 
+        array (
+            'Http\\Message\\' => 13,
         ),
         'G' => 
         array (
@@ -77,6 +89,7 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         'D' => 
         array (
             'Dompdf\\' => 7,
+            'DeepCopy\\' => 9,
             'Datainterface\\mysql\\' => 20,
             'Datainterface\\' => 14,
         ),
@@ -103,6 +116,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
     );
 
     public static $prefixDirsPsr4 = array (
+        'setasign\\Fpdi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/setasign/fpdi/src',
+        ),
         'functions\\' => 
         array (
             0 => __DIR__ . '/../..' . '/includes',
@@ -155,6 +172,14 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         array (
             0 => __DIR__ . '/..' . '/ramsey/collection/src',
         ),
+        'Psr\\Log\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/log/src',
+        ),
+        'Psr\\Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-message/src',
+        ),
         'PHPMailer\\PHPMailer\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
@@ -162,6 +187,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         'PDF\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Core/PDF',
+        ),
+        'Mpdf\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mpdf/mpdf/src',
         ),
         'Modules\\' => 
         array (
@@ -195,6 +224,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         array (
             0 => __DIR__ . '/../..' . '/Core/Installation',
         ),
+        'Http\\Message\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/message-factory/src',
+        ),
         'GlobalsFunctions\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Core/Globals',
@@ -226,6 +259,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         'Dompdf\\' => 
         array (
             0 => __DIR__ . '/..' . '/dompdf/dompdf/src',
+        ),
+        'DeepCopy\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
         'Datainterface\\mysql\\' => 
         array (

@@ -5,268 +5,277 @@ namespace PDF;
 use Datainterface\Database;
 use Datainterface\Insertion;
 use Datainterface\MysqlDynamicTables;
+use Datainterface\SecurityChecker;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use ErrorLogger\ErrorLogger;
 use FileHandler\FileHandler;
 use GlobalsFunctions\Globals;
+use Mpdf\Mpdf;
 
 class PDF
 {
-   private string $contentText;
+    private string $tempFilePath;
+    private string $author;
+    private string $creator;
+    private string $htmlContent;
+    private string $subject;
+    private string $styles;
+    private string $keywords;
+    private $fileOutput;
 
-    private string $filename;
-    private string $fileMetaDataTitle;
-    private string $fileMetaAuthor;
-    private string $fileMetaSubject;
-
-    private string $fileOrientation;
+    private mPdf $mPdf;
+    private $title;
 
     /**
-     * @return string
+     * @return Mpdf
      */
-    public function getFileMetaAuthor(): string
+    public function getMPdf(): Mpdf
     {
-        return $this->fileMetaAuthor;
+        return $this->mPdf;
     }
 
     /**
-     * @param string $fileMetaAuthor
+     * @param Mpdf $mPdf
      */
-    public function setFileMetaAuthor(string $fileMetaAuthor): void
+    public function setMPdf(Mpdf $mPdf): void
     {
-        $this->fileMetaAuthor = $fileMetaAuthor;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFileMetaSubject(): string
-    {
-        return $this->fileMetaSubject;
-    }
-
-    /**
-     * @param string $fileMetaSubject
-     */
-    public function setFileMetaSubject(string $fileMetaSubject): void
-    {
-        $this->fileMetaSubject = $fileMetaSubject;
+        $this->mPdf = $mPdf;
     }
 
     /**
      * @return string
      */
-    public function getFileOrientation(): string
+    public function getTempFilePath(): string
     {
-        return $this->fileOrientation;
+        return $this->tempFilePath;
     }
 
     /**
-     * @param string $fileOrientation
+     * @param string $tempFilePath
      */
-    public function setFileOrientation(string $fileOrientation): void
+    public function setTempFilePath(string $tempFilePath): void
     {
-        $this->fileOrientation = $fileOrientation;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFileType(): string
-    {
-        return $this->fileType;
-    }
-
-    /**
-     * @param string $fileType
-     */
-    public function setFileType(string $fileType): void
-    {
-        $this->fileType = $fileType;
-    }
-    private string $fileType;
-    private string $templatePath;
-
-    private Dompdf $domObject;
-
-    private Options $optionsObject;
-
-    /**
-     * @return Options
-     */
-    public function getOptionsObject(): Options
-    {
-        return $this->optionsObject;
-    }
-
-    /**
-     * @param Options $optionsObject
-     */
-    public function setOptionsObject(Options $optionsObject): void
-    {
-        $this->optionsObject = $optionsObject;
-    }
-
-    /**
-     * @return Dompdf
-     */
-    public function getDomObject(): Dompdf
-    {
-        return $this->domObject;
-    }
-
-    /**
-     * @param Dompdf $domObject
-     */
-    public function setDomObject(Dompdf $domObject): void
-    {
-        $this->domObject = $domObject;
+        $this->tempFilePath = $tempFilePath;
     }
 
     /**
      * @return string
      */
-    public function getContentText(): string
+    public function getAuthor(): string
     {
-        return $this->contentText;
+        return $this->author;
     }
 
     /**
-     * @param string $contentText
+     * @param string $author
      */
-    public function setContentText(string $contentText): void
+    public function setAuthor(string $author): void
     {
-        $this->contentText = $contentText;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFilename(): string
-    {
-        return $this->filename;
-    }
-
-    /**
-     * @param string $filename
-     */
-    public function setFilename(string $filename): void
-    {
-        $this->filename = $filename;
+        $this->author = $author;
     }
 
     /**
      * @return string
      */
-    public function getFileMetaDataTitle(): string
+    public function getCreator(): string
     {
-        return $this->fileMetaDataTitle;
+        return $this->creator;
     }
 
     /**
-     * @param string $fileMetaDataTitle
+     * @param string $creator
      */
-    public function setFileMetaDataTitle(string $fileMetaDataTitle): void
+    public function setCreator(string $creator): void
     {
-        $this->fileMetaDataTitle = $fileMetaDataTitle;
+        $this->creator = $creator;
     }
 
     /**
      * @return string
      */
-    public function getTemplatePath(): string
+    public function getHtmlContent(): string
     {
-        return $this->templatePath;
+        return $this->htmlContent;
     }
 
     /**
-     * @param string $templatePath
+     * @param string $htmlContent
      */
-    public function setTemplatePath(string $templatePath): void
+    public function setHtmlContent(string $htmlContent): void
     {
-        $this->templatePath = $templatePath;
+        $this->htmlContent = $htmlContent;
     }
 
-    public function buildPDF(){
-        $this->domObject->setPaper($this->getFileType(), $this->getFileOrientation());
-        $this->domObject->loadHtml($this->contentText);
-        $this->domObject->render();
+    /**
+     * @return string
+     */
+    public function getSubject(): string
+    {
+        return $this->subject;
     }
 
-    public function showOnBrowser(){
-        $this->domObject->stream($this->filename,['attachment'=>0]);
+    /**
+     * @param string $subject
+     */
+    public function setSubject(string $subject): void
+    {
+        $this->subject = $subject;
     }
 
-    public function buildFromHtml(){
-        $this->domObject->loadHtml($this->getContentText());
+    /**
+     * @return string
+     */
+    public function getStyles(): string
+    {
+        return $this->styles;
     }
 
-    public function init(Options $options){
-        $this->setOptionsObject($options);
-        $this->domObject = new Dompdf($this->getOptionsObject());
+    /**
+     * @param string $styles
+     */
+    public function setStyles(string $styles): void
+    {
+        $this->styles = $styles;
     }
 
-    public function setPdfProperties(){
-        $this->domObject->addInfo('Title',$this->getFileMetaDataTitle());
-        $this->domObject->addInfo('Author',$this->getFileMetaAuthor());
+    /**
+     * @return string
+     */
+    public function getKeywords(): string
+    {
+        return $this->keywords;
     }
 
-    public function loadTemplateFile(){
-        $this->domObject->loadHtmlFile($this->getTemplatePath());
+    /**
+     * @param string $keywords
+     */
+    public function setKeywords(string $keywords): void
+    {
+        $this->keywords = $keywords;
     }
 
-    public function actualFile(){
-        return $this->domObject->output();
+    /**
+     * @return mixed
+     */
+    public function getFileOutput()
+    {
+        return $this->fileOutput;
     }
 
-    public static function pdf($content, $title='none',$author='none', $filename='document.pdf', $orientation='landscape', $size = 'A4', $externalCss = false, $toBrowser = true, $saveType = 'file'){
-        $option = new Options;
-        $option->setChroot(__DIR__);
-        $option->setIsRemoteEnabled($externalCss);
-        $pdf = new PDF;
-        $pdf->init($option);
-        $pdf->setFileMetaDataTitle($title);
-        $pdf->setFileMetaAuthor($author);
-        $pdf->setFileOrientation($orientation);
-        $pdf->setFileType($size);
-        $pdf->setFilename($filename);
-        $pdf->setContentText($content);
-        $pdf->buildPDF();
-        $pdf->setPdfProperties();
-
-        if($toBrowser === true){
-            $pdf->showOnBrowser();
+    public function pdf($toViewBrowser = false, $saveTodb = false){
+        $this->mPdf->setCreator($this->getCreator());
+        $this->mPdf->setAuthor($this->getAuthor());
+        $this->mPdf->setTitle($this->getTitle());
+        $this->mPdf->setSubject($this->getSubject());
+        $this->mPdf->setKeywords($this->getKeywords());
+        $this->mPdf->WriteHTML($this->getStyles(), 1);
+        $this->mPdf->WriteHTML($this->getHtmlContent(), 2);
+        $file = 'Files/pdf-'.date('Y-m-d-h-i-s').'.pdf';
+        $this->mPdf->OutputFile($file);
+        if($toViewBrowser){
+            $this->mPdf->Output();
         }
-        if($saveType === 'file'){
-            $pdf->getDomObject()->stream();
-            $base = Globals::root().'/Files';
-            $url = FileHandler::saveFile($filename,$content,'binary');
-            $list = explode('/',$url);
-            $complete = $base.'/Files/'.end($list);
-            return ['path'=>$complete, 'url'=>$url];
-        }
-        if($saveType ==='database'){
-            $schema = self::pdfSchema();
-            $maker = new MysqlDynamicTables();
-            $maker->resolver(Database::database(),$schema['col'],$schema['att'],$schema['table'],false);
-            $output = $pdf->actualFile();
+        if($saveTodb){
+            $d = stat($file);
+            $pathinfo = pathinfo($file);
             $data = [
-                'filename'=>$filename,
-                'filesize'=>filesize($output),
-                'fileBOB'=>$output
+                'filename'=>$pathinfo['filename'],
+                'filesize'=>$d['size'],
+                'fileBOB'=>file_get_contents($file),
+                'owner'=>'unknown',
+                'time'=>$d['mtime'],
+                'type'=>$pathinfo['extension'],
+                'path'=>$file,
+                'uri'=>Globals::protocal().'://'.Globals::serverHost().'/'.Globals::home().'/'.$file
             ];
-            return Insertion::insertRow($schema['table'],$data);
+            try{
+             $fid = Insertion::insertRow($this->pdfSchema()['table'],$data);
+             $this->setFileOutput($file);
+             return [
+               'path'=>$file,
+                 'fid'=>$fid
+             ];
+            }catch (\Throwable $e){
+                ErrorLogger::log($e);
+            }
+        }else{
+            return $file;
         }
+
     }
 
-   public static function pdfSchema(){
-        $columns= ['fid','filename','filesize','fileBOB'];
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title): void
+    {
+        $this->title = $title;
+    }
+
+    /**
+     * @param mixed $fileOutput
+     */
+    public function setFileOutput($fileOutput): void
+    {
+        $this->fileOutput = $fileOutput;
+    }
+
+   public function pdfSchema(){
+        $columns= ['fid','filename','filesize','fileBOB','owner','time','type', 'path','uri'];
         $attributes = [
             'fid'=>['int(11)','auto_increment','primary key'],
             'filename'=>['varchar(50)','not','null'],
             'filesize'=>['int(11)','null'],
-            'fileBOB'=>['longblob','not','null']
+            'fileBOB'=>['longblob','not','null'],
+            'owner'=>['varchar(50)', 'null'],
+            'time'=>['varchar(50)','null'],
+            'type'=>['varchar(20)', 'null'],
+            'path'=>['varchar(250)', 'null'],
+            'uri'=>['varchar(250)','null']
             ];
         return ['col'=>$columns,'att'=>$attributes,'table'=>'pdf_documents'];
    }
+
+   public function __construct()
+   {
+       if(SecurityChecker::isConfigExist()){
+          if(Database::database()){
+              $maker = new MysqlDynamicTables();
+              $maker->resolver(Database::database(),
+                  $this->pdfSchema()['col'],
+                  $this->pdfSchema()['att'],
+                  $this->pdfSchema()['table'],
+                  false
+              );
+          }
+       }
+   }
+
+   public static function makePdf(string $title, string $name,
+                           string $author, string $creator, string $htmlContent,
+                           array $keywords= [], string $subject = "",
+                           string $styles = "",bool $stylesIsFile = false, bool $saveToDb = false,
+                           bool $toViewBrowser = false){
+       $plugin = new mPdf;
+       $pdf = new \PDF\PDF();
+       $pdf->setMPdf($plugin);
+       $pdf->setTitle($title);
+       $pdf->setCreator($creator);
+       $pdf->setAuthor($author);
+       $pdf->setKeywords(implode(',', (array_values($keywords))));
+       $pdf->setSubject($subject);
+       $pdf->setStyles($stylesIsFile ? file_get_contents($styles) : $styles);
+       $pdf->setHtmlContent($htmlContent);
+       return $pdf->pdf($toViewBrowser,$saveToDb);
+   }
+
 }
