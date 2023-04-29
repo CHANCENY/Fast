@@ -14,8 +14,10 @@ $user= $security->checkCurrentUser();
 
 if($user === "U-Admin"){
     echo \ApiHandler\ApiHandlerClass::stringfiyData(callingActions(\GlobalsFunctions\Globals::get('command'), \GlobalsFunctions\Globals::get('userid')));
+    exit;
 }else{
    echo \ApiHandler\ApiHandlerClass::stringfiyData(['msg'=>"not unthorized"]);
+   exit;
 }
 
 function callingActions($command, $userid){
