@@ -32,6 +32,12 @@ class FileHandler
                   goto top;
               }else{
                   if(file_put_contents($path.'/'.$filename, $content)){
+                      $data =[
+                          'filename'=>$filename,
+                          'filesize'=>filesize('Files/'.$filename),
+                          'fileurl'=>$home.'/Files/'.$filename
+                      ];
+                      self::dbSavingFile($data);
                       return $home.'/Files/'.$filename;
                   }
               }
@@ -43,6 +49,12 @@ class FileHandler
                   goto tops;
               }else{
                   if(file_put_contents($path.'/'.$filename, $data)){
+                      $data =[
+                          'filename'=>$filename,
+                          'filesize'=>filesize('Files/'.$filename),
+                          'fileurl'=>$home.'/Files/'.$filename
+                      ];
+                      self::dbSavingFile($data);
                     return $home.'/Files/'.$filename;
                   }
               }
@@ -105,7 +117,7 @@ class FileHandler
             'filename'=>['VARCHAR(100)','NULL'],
             'filesize'=>['INT(11)', 'NULL'],
             'fileurl'=>['VARCHAR(250)','NULL'],
-            'target_id'=>['INT(11)','NOT NULL']
+            'target_id'=>['INT(11)','NULL']
         ];
         $maker = new MysqlDynamicTables();
         $maker->resolver($con,$columns,$attributes,'file_managed',false);
