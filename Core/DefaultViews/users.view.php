@@ -9,6 +9,7 @@ if(!empty(\GlobalsFunctions\Globals::get('q'))){
 $sortedData = \UI\Pagination::pager($users,'users-pagination',5);
 $users = $sortedData['data'];
 $pager = $sortedData['html'];
+$host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::serverHost().'/'.\GlobalsFunctions\Globals::home();
 ?>
 
 <form class="flex items-center" method="GET" action="<?php echo \GlobalsFunctions\Globals::url(); ?>">
@@ -27,7 +28,7 @@ $pager = $sortedData['html'];
 
 
 <div id="alertbox"></div>
-<table class="table table-hover">
+<table class="table table-hover" id="table-people" data-host="<?php echo $host; ?>">
 
     <thead>
     <tr>
@@ -109,7 +110,8 @@ $pager = $sortedData['html'];
     <script type="application/javascript">
 
         const requestSender = (params)=>{
-            const url = window.location.protocol+'//'+window.location.hostname+'/users-commands?'+params;
+            const t = document.getElementById('table-people');
+            const url = t.getAttribute('data-host')+'/users-commands?'+params;
             let xhr = new XMLHttpRequest();
             xhr.open('GET',url, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
