@@ -30,6 +30,7 @@ if(host  !== null){
                     if(stateEdit === null){
                         stateEdit = document.createElement('select');
                         stateEdit.id = "state-edit";
+                        stateEdit.name = 'states';
                         stateEdit.className ="form-control";
                         stateDiv.appendChild(stateEdit);
                     }
@@ -70,6 +71,7 @@ if(host  !== null){
                     if(cityEdit === null){
                         cityEdit = document.createElement('select');
                         cityEdit.id = "city-edit";
+                        cityEdit.name = 'cities';
                         cityEdit.className = "form-control";
                         cityDiv.appendChild(cityEdit);
                     }
