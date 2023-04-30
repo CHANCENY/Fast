@@ -2,6 +2,7 @@
 
 namespace RoutesManager;
 
+use ApiHandler\ApiHandlerClass;
 use Core\Router;
 use Datainterface\Database;
 use Datainterface\Delete;
@@ -200,6 +201,48 @@ class RoutesManager
         $content = json_decode(Router::clearUrl(file_get_contents($base)),true);
         $content[] = $data;
         return file_put_contents($base, json_encode($content));
+    }
+
+    public function production($data){
+        $base = $_SERVER['DOCUMENT_ROOT'].'/Core/Router/Register/production.json';
+        if(!chmod($base, 0777)){
+            return false;
+        }
+        $content = json_decode(Router::clearUrl(file_get_contents($base)),true);
+        $content[] = $data;
+        return file_put_contents($base, json_encode($content));
+    }
+
+    public function tempProduction(){
+        $base = Globals::root()."/Core/Router/Register/production.json";
+        if(file_exists($base)){
+            return json_decode(file_get_contents($base), true);
+        }
+        return [];
+    }
+
+    public function installerViewProduction(){
+        $flag = false;
+        if(SecurityChecker::isConfigExist()){
+            $list = $this->tempProduction();
+            foreach ($list as $key=>$value){
+                $filename = "";
+                if(!empty( $value['view_path_absolute'])){
+                    $list = explode('/', $value['view_path_absolute']);
+                    $filename = end($list);
+                }
+                $value['view_path_absolute'] = "Views/{$filename}";
+                $value['view_path_relative'] = "Views/{$filename}";
+                unset($value['rvid']);
+                $selct = Selection::selectById('routes',['view_url'=>$value['view_url']]);
+                if(empty($selct)){
+                    Insertion::insertRow('routes',$value);
+                }
+                $flag = true;
+            }
+            return $flag;
+
+        }
     }
 
 

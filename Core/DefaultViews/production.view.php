@@ -35,7 +35,10 @@ if(\GlobalsFunctions\Globals::method() === 'POST'){
                 echo \ApiHandler\ApiHandlerClass::stringfiyData(['result'=>true, 'msg'=>'Included Already']);
                 exit;
             }
-            echo \ApiHandler\ApiHandlerClass::stringfiyData(['result'=>(new \RoutesManager\RoutesManager())->writeInTemps($data), 'msg'=>'Included']);
+            echo \ApiHandler\ApiHandlerClass::stringfiyData(['result'=>(new \RoutesManager\RoutesManager())->production($data), 'msg'=>'Included']);
+            exit;
+        }else{
+            echo \ApiHandler\ApiHandlerClass::stringfiyData(['result'=>(new RoutesManager\RoutesManager())->installerViewProduction(), 'msg'=>'installed']);
             exit;
         }
 
@@ -55,6 +58,9 @@ $host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
                 </li>
             <?php endforeach; ?>
         </ul>
+        <div class="container mt-5">
+            <button id="config" class="btn btn-danger">Update Configuration </button>
+        </div>
     </div>
 </section>
 <div>
@@ -74,6 +80,7 @@ $host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
                   if(data.result){
                       tag.textContent = data.msg;
                   }
+
                 }
             }
             xhr.send(JSON.stringify(data));
@@ -90,5 +97,10 @@ $host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
 
             })
         }
+
+        document.getElementById('config').addEventListener('click', (e)=>{
+           const id = -111;
+           saveProduction({id},document.getElementById('config'));
+        })
     </script>
 </div>
