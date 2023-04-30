@@ -3,6 +3,7 @@
 namespace Json;
 
 use Core\Router;
+use ErrorLogger\ErrorLogger;
 use GlobalsFunctions\Globals;
 use Ramsey\Uuid\Uuid;
 
@@ -11,206 +12,222 @@ use Ramsey\Uuid\Uuid;
  */
 class Json
 {
-    /**
-     * @param $storageName this is group name (folder name)
-     * @param $description this description of the store
-     * @param $uniqueName this unique name if you have two or more file storageName then provide value to unigueName
-     * @return string|null return null if two mandatory field not provide or return path of storage
-     */
-    public static function createStorage($storageName, $description, $uniqueName = ""){
-      if(empty($storageName)){
-          return null;
-      }
-      $counter = 0;
-      regenerateUid:
-      $data = [
-          'storage'=>$storageName,
-          'timestamp'=>time(),
-          'createdby'=>Globals::user()[0]['firstname'].'-'.Globals::user()[0]['lastname'].'-'.Globals::user()[0]['uid'],
-          'description'=>$description,
-          'path'=>Globals::root().'/Json-store/'.$storageName,
-          'alias'=>$uniqueName
-      ];
+    private string $type;
 
-      $base = Globals::root();
-      $path = "{$base}/Json-store/{$storageName}";
-      if(is_dir($path) === false){
-          mkdir($path,777,true);
-      }else{
-          if(empty($uniqueName)){
-              throw new \Exception("{$storageName} is already occurred if you want to create new document in this storage then set unique parameter too",979);
+    /**
+     * @param string $type
+     */
+    public function setType(string $type): void
+    {
+        $this->type = $type;
+    }
+    /**
+     * @var string
+     */
+    private string $storeName;
+    /**
+     * @var true
+     */
+    private bool $error;
+    /**
+     * @var string
+     */
+    private string $message;
+    /**
+     * @var mixed
+     */
+    private mixed $dataInStorage;
+
+    /**
+     * @return string
+     */
+    public function getStoreName(): string
+    {
+        return $this->storeName;
+    }
+
+    /**
+     * @param string $storeName
+     */
+    public function setStoreName(string $storeName): void
+    {
+        $file =Globals::root()."/config/storage/{$storeName}";
+        if(!file_exists($file)){
+            $list = explode('/', $file);
+            mkdir(implode('/',array_slice($list, 0, count($list) - 1)), 0777, true);
+            $handler = fopen($file,'x+');
+            fclose($handler);
+            if(chmod($file, 0777)){
+               file_put_contents($file, '[]');
+           }
+        }
+        $this->storeName = $file;
+    }
+
+    /**
+     *
+     */
+    public function __construct()
+  {
+      $this->storeName = "";
+      $this->type = 'Assoc';
+  }
+
+    /**
+     * @param array $data
+     * @return $this
+     */
+    public function save(array $data): Json{
+
+      try {
+          $storageContent = $this->getDataInStorage();
+          $data['defaultKey'] = self::uuid();
+          $storageContent[] = $data;
+          $content = json_encode($storageContent);
+          $result = file_put_contents($this->storeName, Router::clearUrl($content));
+          if($result){
+              $this->error = false;
+              $this->message = "Saved data with key: {$data['defaultKey']}";
+              $this->dataInStorage = $storageContent;
           }else{
-              $st = self::getStorageByUniqueName($uniqueName);
-              if(!empty($st)){
-                  throw new \Exception("{$storageName} is already in use",7685);
-              }
+              $this->error = true;
+              $this->message = "Failed to save data";
           }
+          return $this;
+      }catch (\Throwable $e){
+          $this->error = true;
+          $this->message = $e->getMessage();
+          ErrorLogger::log($e);
+          return $this;
       }
-      $uuid = self::store($data,$counter);
-      $path .= "/{$uuid}.json";
-      if(file_exists($path)){
-          $counter += 1;
-          goto regenerateUid;
-      }
-      file_put_contents($path, json_encode([]));
-      return $path;
 
   }
 
     /**
-     * @param $data
-     * @param $counter
-     * @return string|null
+     * @return mixed
      */
-    private static function store($data, $counter){
-      if(gettype($data) !== 'array' || empty($data)){
-          return null;
-      }
+    public function getDataInStorage(): mixed
+    {
+        if(empty($this->storeName)){
+            $this->error = true;
+            $this->message = "Storage path not specified";
+            return $this;
+        }
+        $type = true;
+        if($this->type === 'Std'){
+            $type = false;
+        }
+        $this->dataInStorage = json_decode(file_get_contents($this->storeName), $type);
+        return $this->dataInStorage;
+    }
 
-      $base =Globals::root();
-      $path = "{$base}/Json-store/";
-      if(is_dir($path) === false){
-          mkdir($path,777,true);
-      }
-      $store = $path.'store.json';
-      if(file_exists($store) === false){
-          file_put_contents($store, json_encode([]));
-      }
-      $stores = json_decode(Router::clearUrl(file_get_contents($store)),true);
+    /**
+     * @return bool
+     */
+    public function isError(): bool
+    {
+        return $this->error;
+    }
 
-      $data['uuid'] = self::uuid();
-
-      if($counter === 0){
-          $stores[] = $data;
-      }else{
-          array_pop($stores);
-          $stores[] = $data;
-      }
-
-      file_put_contents($store, Router::clearUrl(json_encode($stores)));
-      return $data['uuid'];
-  }
+    /**
+     * @return string
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
 
     /**
      * @return string
      */
     public static function uuid(){
-      $uuid1 = Uuid::uuid1();
-     return $uuid1->toString();
-  }
+        $uuid1 = Uuid::uuid1();
+        return $uuid1->toString();
+    }
 
     /**
-     * @return array|mixed
+     * @param array $data
+     * @param string $defaultKey
+     * @return $this
      */
-    public static function getStorages(){
-        $base = Globals::root();
-        $path = "{$base}/Json-store";
-        if(is_dir($path)){
-            $path .= '/store.json';
-            return json_decode(Router::clearUrl(file_get_contents($path)),true);
-        }
-        return [];
-  }
-
-
-    /**
-     * @param $name
-     * @return array|null
-     */
-    public static function getStorageByName($name){
-        $path = Globals::root().'/Json-store/store.json';
-        if(file_exists($path)){
-            $lists = json_decode(Router::clearUrl(file_get_contents($path)), true);
-            $tempList = [];
-            foreach ($lists as $list=>$value){
+    public function upDate(array $data, string $defaultKey): Json{
+        try {
+            $contentStorage = $this->getDataInStorage();
+            $flag = false;
+            $keys = 0;
+            $oldData = [];
+            foreach ($contentStorage as$key=>$value){
                 if(gettype($value) === 'array'){
-                    extract($value);
-                    if($name === $storage){
-                        $tempList[]= $value;
+                    if($value['defaultKey'] === $defaultKey){
+                        $keys = $key;
+                        $oldData = $value;
+                        $flag = true;
+                       break;
                     }
                 }
             }
-            return $tempList;
+
+            if($flag){
+                $arrayKeys = array_keys($oldData);
+                foreach ($arrayKeys as $key=>$value){
+                    $contentStorage[$keys][$value] = $data[$value] ?? $oldData[$value];
+                }
+
+                $result = file_put_contents($this->storeName, Router::clearUrl(json_encode($contentStorage)));
+                if($result){
+                    $this->error = false;
+                    $this->message = "Updated data at: {$defaultKey}";
+                    $this->dataInStorage = $contentStorage;
+                }
+            }else{
+                $this->error = true;
+                $this->message = "Failed to Updated data at: {$defaultKey}";
+            }
+            return $this;
+        }catch (\Throwable $e){
+            $this->error = true;
+            $this->message = $e->getMessage();
+            ErrorLogger::log($e);
+            return $this;
         }
-        return null;
-  }
+    }
+
 
     /**
-     * @param $unique
-     * @return array|null
+     * @param $defaultKey
+     * @return $this
      */
-    public static function getStorageByUniqueName($unique){
-       $path = Globals::root().'/Json-store/store.json';
-       if(file_exists($path)){
-           $lists = json_decode(Router::clearUrl(file_get_contents($path)), true);
-           $tempList = [];
-           foreach ($lists as $list=>$value){
-               if(gettype($value) === 'array' && isset($value['alias'])){
-                   extract($value);
-                   if($unique === $alias){
-                       $tempList[]= $value;
-                   }
-               }
-           }
-           return $tempList;
-       }
-       return null;
-   }
-
-    /**
-     * @param $name
-     * @param $unique
-     * @return array|null
-     */
-    public static function strictGetStorage($name, $unique){
-       $path = Globals::root().'/Json-store/store.json';
-       if(file_exists($path)){
-           $lists = json_decode(Router::clearUrl(file_get_contents($path)), true);
-           $tempList = [];
-           foreach ($lists as $list=>$value){
-               if(gettype($value) === 'array' && isset($value['alias'])){
-                   extract($value);
-                   if($unique === $alias && $name === $storage){
-                       $tempList[]= $value;
-                   }
-               }
-           }
-           return $tempList;
-       }
-       return null;
-   }
-
-    /**
-     * @param $uuid
-     * @return array|null
-     */
-    public static function getStorageByUuid($uuid){
-       $path = Globals::root().'/Json-store/store.json';
-       if(file_exists($path)){
-           $lists = json_decode(Router::clearUrl(file_get_contents($path)), true);
-           $tempList = [];
-           foreach ($lists as $list=>$value){
-               if(gettype($value) === 'array'){
-                   if($uuid === $value['uuid']){
-                       $tempList[]= $value;
-                   }
-               }
-           }
-           return $tempList;
-       }
-       return null;
-   }
-
-   public static function removeStore($uuid){
-        $stores = self::getStorages();
-        $temp = [];
-        foreach ($stores as $store=>$value){
-           if(isset($value['uuid']) && $value['uuid'] !== $uuid){
-               $temp[] = $value;
-           }
+    public function delete($defaultKey):Json{
+        try{
+            $contentData = $this->getDataInStorage();
+            $temp = [];
+            $flag = false;
+            foreach ($contentData as $key=>$value){
+                if(gettype($value) === 'array'){
+                    if($value['defaultKey'] !== $defaultKey){
+                        $temp[] = $value;
+                        $flag = true;
+                    }
+                }
+            }
+            if($flag){
+                $result = file_put_contents($this->storeName, Router::clearUrl(json_encode($temp)));
+                if($result){
+                    $this->error = false;
+                    $this->message = "Deleted data at: {$defaultKey}";
+                    $this->dataInStorage = $temp;
+                }else{
+                    $this->error = true;
+                    $this->message = "Failed to Delete data at: {$defaultKey}";
+                }
+                return $this;
+            }
+            throw new \Exception("Deleting failed no match found of key {$defaultKey}");
+        }catch (\Throwable $e){
+            $this->error = true;
+            $this->message = $e->getMessage();
+            ErrorLogger::log($e);
+            return $this;
         }
-        $path = Globals::root().'/Json-store/store.json';
-        return file_put_contents($path, json_encode($temp));
    }
 }
-
