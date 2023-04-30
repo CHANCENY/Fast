@@ -195,11 +195,12 @@ class RoutesManager
     public function writeInTemps($data){
         $base = $_SERVER['DOCUMENT_ROOT'].'/Core/Router/Register/registered_path_available.json';
         if(!chmod($base, 0777)){
-            return;
+            return false;
         }
         $content = json_decode(Router::clearUrl(file_get_contents($base)),true);
         $content[] = $data;
         return file_put_contents($base, json_encode($content));
     }
+
 
 }
