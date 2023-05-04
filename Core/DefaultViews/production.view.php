@@ -2,9 +2,11 @@
 
 $inDbRoutes = \Datainterface\Selection::selectAll('routes');
 $defaults = (new \RoutesManager\RoutesManager())->tempReaderView();
-
+$msg = null;
 $temps = [];
 $ids = [];
+
+
 foreach ($inDbRoutes as $key=>$value){
     if(gettype($value) === 'array'){
         if(str_contains($value['view_path_absolute'], 'DefaultViews')){
@@ -16,91 +18,67 @@ foreach ($inDbRoutes as $key=>$value){
     }
 }
 if(\GlobalsFunctions\Globals::method() === 'POST'){
-    $incoming = \ApiHandler\ApiHandlerClass::getPostBody();
-    if(!empty($incoming) && (new User\User())->role() === 'Admin'){
-        $data = \Datainterface\Selection::selectById('routes',['rvid'=>$incoming['id']]);
-        if(!empty($data)){
-            $data = $data[0];
-            $defaults = (new \RoutesManager\RoutesManager())->tempReaderView();
-            $url = $data['view_url'];
-            $flag = false;
-            foreach ($defaults as $item=>$value){
-                if(gettype($value) == 'array'){
-                    if($value['view_url'] === $url){
-                        $flag = true;
-                    }
-                }
-            }
-            if($flag){
-                echo \ApiHandler\ApiHandlerClass::stringfiyData(['result'=>true, 'msg'=>'Included Already']);
-                exit;
-            }
-            echo \ApiHandler\ApiHandlerClass::stringfiyData(['result'=>(new \RoutesManager\RoutesManager())->production($data), 'msg'=>'Included']);
-            exit;
-        }else{
-            echo \ApiHandler\ApiHandlerClass::stringfiyData(['result'=>(new RoutesManager\RoutesManager())->installerViewProduction(), 'msg'=>'installed']);
-            exit;
-        }
+  if(isset($_POST['submit-production'])){
+      $id = \GlobalsFunctions\Globals::post('add');
+      $data = \Datainterface\Selection::selectById('routes',['rvid'=>$id]);
+      $view = $data[0] ?? ['rvid'=>0];
+      unset($view['rvid']);
+      $list = \Sessions\SessionManager::getSession('added') ?? [];
+      if(in_array($view['view_url'], $list)){
+          $msg = \Alerts\Alerts::alert('danger', 'View already added');
+          goto out;
+      }
+      $result = (new \RoutesManager\RoutesManager())->production($view);
+      if($result){
+          $l = \Sessions\SessionManager::getSession('added') ?? [];
+          $l[] = $view['view_url'];
+          \Sessions\SessionManager::setSession('added', $l);
+          $msg = \Alerts\Alerts::alert('info',"View ({$view['view_name']}) added to production views");
+      }else{
+          $msg = \Alerts\Alerts::alert('warning',"Failed to add view ({$view['view_name']}) to production views");
+      }
+  }
 
-    }
+  if(isset($_POST['config-production'])){
+      $result = (new \RoutesManager\RoutesManager())->installerViewProduction();
+      if($result){
+          $msg = \Alerts\Alerts::alert('info','View imported successfully');
+      }else{
+          $msg = \Alerts\Alerts::alert('warning','Failed to import views');
+      }
+  }
 }
-
-
-
+out:
+$added = \Sessions\SessionManager::getSession('added');
 $host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::serverHost().'/'.\GlobalsFunctions\Globals::home();
 ?>
 <section class="container mt-4">
     <div class="m-auto bg-light border-white border">
+        <?php echo $msg ?? null ?>
         <ul class="list-group" id="url-listing" data-ids="<?php echo implode(',',array_values($ids)); ?>" data-host="<?php echo $host; ?>">
             <?php foreach ($temps as $key=>$value): ?>
+               <?php if(!empty($added) && !in_array($value['view_url'], $added)): ?>
                 <li class="list-group-item mt-2 rounded" id="list-<?php echo $value['rvid']; ?>"><?php echo $value['view_name']; ?>
-                    <button class="btn btn-primary text-center text-white float-lg-end" id="btn-<?php echo $value['rvid']; ?>" data-id="<?php echo $value['rvid']; ?>">Include In Production (<?php echo $value['rvid']; ?>)</button>
+                    <form method="POST" action="#">
+                        <input type="hidden" name="add" value="<?php echo $value['rvid']; ?>">
+                        <button type="submit" name="submit-production" class="btn btn-primary bg-primary text-center text-white float-lg-end" id="btn-<?php echo $value['rvid']; ?>" data-id="<?php echo $value['rvid']; ?>">Include In Production (<?php echo $value['rvid']; ?>)</button>
+                    </form>
                 </li>
+            <?php else: ?>
+                    <li class="list-group-item mt-2 rounded" id="list-<?php echo $value['rvid']; ?>"><?php echo $value['view_name']; ?>
+                        <form method="POST" action="#">
+                            <input type="hidden" name="add" value="<?php echo $value['rvid']; ?>">
+                            <button type="submit" name="submit-production" class="btn btn-primary bg-primary text-center text-white float-lg-end" id="btn-<?php echo $value['rvid']; ?>" data-id="<?php echo $value['rvid']; ?>">Include In Production (<?php echo $value['rvid']; ?>)</button>
+                        </form>
+                    </li>
+            <?php endif; ?>
             <?php endforeach; ?>
         </ul>
         <div class="container mt-5">
-            <button id="config" class="btn btn-danger">Update Configuration </button>
+            <form method="POST" action="#">
+                <input type="hidden" name="config" value="<?php echo uniqid(); ?>">
+                <button type="submit" id="config" name="config-production" class="btn btn-danger">Update Configuration </button>
+            </form>
         </div>
     </div>
 </section>
-<div>
-    <script type="application/javascript">
-        const ids = document.getElementById('url-listing').getAttribute('data-ids');
-        const host = document.getElementById('url-listing').getAttribute('data-host');
-        const list = ids.split(',');
-
-        const saveProduction = (data, tag) =>{
-            const xhr = new XMLHttpRequest();
-            const url = host+'/production?';
-            xhr.open('POST',url, true);
-            xhr.setRequestHeader('Content-Type','application/json');
-            xhr.onload = function (){
-                if(this.status === 200){
-                  const data = JSON.parse(this.responseText);
-                  if(data.result){
-                      tag.textContent = data.msg;
-                  }
-
-                }
-            }
-            xhr.send(JSON.stringify(data));
-
-        }
-
-        for (let i = 0; i < list.length; i++){
-            document.getElementById('btn-'+list[i]).addEventListener('click', (e)=>{
-                let id = e.target.id;
-                const idlist = id.split('-');
-                id = idlist[idlist.length - 1];
-                const data = {id};
-                saveProduction(data,document.getElementById('btn-'+id));
-
-            })
-        }
-
-        document.getElementById('config').addEventListener('click', (e)=>{
-           const id = -111;
-           saveProduction({id},document.getElementById('config'));
-        })
-    </script>
-</div>
