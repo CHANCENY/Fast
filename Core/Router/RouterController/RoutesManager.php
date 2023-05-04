@@ -205,12 +205,17 @@ class RoutesManager
 
     public function production($data){
         $base = $_SERVER['DOCUMENT_ROOT'].'/Core/Router/Register/production.json';
+        if(!file_exists($base)){
+            $path = $_SERVER['DOCUMENT_ROOT'].'/Core/Router/Register/';
+            chmod($path, 0777);
+            file_put_contents($base, '[]');
+        }
         if(!chmod($base, 0777)){
             return false;
         }
-        $content = json_decode(Router::clearUrl(file_get_contents($base)),true);
+        $content = json_decode(file_get_contents($base),true);
         $content[] = $data;
-        return file_put_contents($base, json_encode($content));
+        return file_put_contents($base, Router::clearUrl(json_encode($content)));
     }
 
     public function tempProduction(){
@@ -233,12 +238,14 @@ class RoutesManager
                 }
                 $value['view_path_absolute'] = "Views/{$filename}";
                 $value['view_path_relative'] = "Views/{$filename}";
-                unset($value['rvid']);
+
                 $selct = Selection::selectById('routes',['view_url'=>$value['view_url']]);
                 if(empty($selct)){
                     Insertion::insertRow('routes',$value);
+                    $flag = true;
+                }else{
+                    $flag = false;
                 }
-                $flag = true;
             }
             return $flag;
 
