@@ -3,20 +3,8 @@
 $inDbRoutes = \Datainterface\Selection::selectAll('routes');
 $defaults = (new \RoutesManager\RoutesManager())->tempReaderView();
 $msg = null;
-$temps = [];
 $ids = [];
 
-
-foreach ($inDbRoutes as $key=>$value){
-    if(gettype($value) === 'array'){
-        if(str_contains($value['view_path_absolute'], 'DefaultViews')){
-            continue;
-        }else{
-            $temps[] = $value;
-            $ids[] = $value['rvid'];
-        }
-    }
-}
 if(\GlobalsFunctions\Globals::method() === 'POST'){
   if(isset($_POST['submit-production'])){
       $id = \GlobalsFunctions\Globals::post('add');
@@ -56,16 +44,16 @@ $host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
     <div class="m-auto bg-light border-white border">
         <?php echo $msg ?? null ?>
         <ul class="list-group" id="url-listing" data-ids="<?php echo implode(',',array_values($ids)); ?>" data-host="<?php echo $host; ?>">
-            <?php foreach ($temps as $key=>$value): ?>
+            <?php foreach ($inDbRoutes as $key=>$value): ?>
                <?php if(!empty($added) && !in_array($value['view_url'], $added)): ?>
-                <li class="list-group-item mt-2 rounded" id="list-<?php echo $value['rvid']; ?>"><?php echo $value['view_name']; ?>
+                <li class="list-group-item mt-2 rounded" id="list-<?php echo $value['rvid']; ?>"><?php echo strstr($value['view_path_absolute'], 'Core/DefaultViews') ? $value['view_name'].' (Default)' : $value['view_name']; ?>
                     <form method="POST" action="#">
                         <input type="hidden" name="add" value="<?php echo $value['rvid']; ?>">
                         <button type="submit" name="submit-production" class="btn btn-primary bg-primary text-center text-white float-lg-end" id="btn-<?php echo $value['rvid']; ?>" data-id="<?php echo $value['rvid']; ?>">Include In Production (<?php echo $value['rvid']; ?>)</button>
                     </form>
                 </li>
             <?php else: ?>
-                    <li class="list-group-item mt-2 rounded" id="list-<?php echo $value['rvid']; ?>"><?php echo $value['view_name']; ?>
+                    <li class="list-group-item mt-2 rounded" id="list-<?php echo $value['rvid']; ?>"><?php echo strstr($value['view_path_absolute'], 'Core/DefaultViews') ? $value['view_name'].' (Default)' : $value['view_name']; ?>
                         <form method="POST" action="#">
                             <input type="hidden" name="add" value="<?php echo $value['rvid']; ?>">
                             <button type="submit" name="submit-production" class="btn btn-primary bg-primary text-center text-white float-lg-end" id="btn-<?php echo $value['rvid']; ?>" data-id="<?php echo $value['rvid']; ?>">Include In Production (<?php echo $value['rvid']; ?>)</button>
@@ -77,7 +65,7 @@ $host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
         <div class="container mt-5">
             <form method="POST" action="#">
                 <input type="hidden" name="config" value="<?php echo uniqid(); ?>">
-                <button type="submit" id="config" name="config-production" class="btn btn-danger">Update Configuration </button>
+                <button type="submit" id="config" name="config-production" class="btn btn-danger bg-danger">Update Configuration </button>
             </form>
         </div>
     </div>

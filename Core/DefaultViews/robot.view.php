@@ -18,22 +18,26 @@ if(!empty(\GlobalsFunctions\Globals::get('action')) && !empty(\GlobalsFunctions\
        echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message]);
    }
    elseif (trim($action) == 'add'){
-       $result = \Robot\Robot::add($url);
+       $result = \Robot\Robot::add($url,'api-call');
        $message = $result ? "View: {$view['view_name']} has been added to Robots.txt file" : "View: {$view['view_name']} failed to be added to Robots.txt file.";
        echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message]);
+       exit;
    }
    elseif (trim($action) == 'disallow'){
        $result = \Robot\Robot::disAllowed($url);
        $message = $result ? "View: {$view['view_name']} has been added to disallowed section of Robots.txt file" : "View: {$view['view_name']} failed to be added to disallowed section of Robots.txt file.";
        echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message]);
-   }elseif (trim($action) == 'allowed'){
+       exit;
+   }elseif (trim($action) == 'allow'){
        $result = \Robot\Robot::allowed($url);
        $message = $result ? "View: {$view['view_name']} has been added to allowed section of Robots.txt file" : "View: {$view['view_name']} failed to be added to allowed section of Robots.txt file.";
        echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message]);
+       exit;
    }else{
        $result = \Robot\Robot::upDateRobotFile();
        $message = $result ? "Robots.txt file updated" : "Robots.txt file failed to update";
        echo \ApiHandler\ApiHandlerClass::stringfiyData(['status'=>200, 'action'=>$message]);
+       exit;
    }
    exit;
 }
@@ -110,6 +114,7 @@ $host = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
             xhr.setRequestHeader('Content-Type','application/json');
             xhr.onload = function (){
                 if(this.status === 200){
+                console.log(this.responseText);
                     const data = JSON.parse(this.responseText);
                     let div = document.createElement('div');
                     div.className = "bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4";

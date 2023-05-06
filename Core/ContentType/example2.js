@@ -1,7 +1,7 @@
 const callRelated = () =>{
     const baseUrl = document.getElementById('layout-content-form').getAttribute('data-call');
     const xhr = new XMLHttpRequest();
-    xhr.open('GET', baseUrl+'/content-type-callbacks?call=@contentType', true);
+    xhr.open('GET', '/content-type-callbacks?call=@contentType', true);
     xhr.setRequestHeader('Content-Type','application/json');
     xhr.onload =function (){
         if(this.status === 200){
