@@ -64,7 +64,7 @@ class ApiHandlerClass
        try{
            $content = self::findHeaderValue('Content-Type');
            if($content === "application/json"){
-               $url = Globals::uri();
+               $url = Router::clearUrl(Globals::uri());
                $parseurl = parse_url($url, PHP_URL_PATH);
                $parseurl = substr($parseurl, 1 , strlen($parseurl));
                $list = strpos($parseurl, '/') ? explode('/',$parseurl) : $parseurl;
@@ -74,6 +74,7 @@ class ApiHandlerClass
                    Router::requiringFile($view);
                }
            }
+           
        }catch(\Exception $e){
            ErrorLogger::log($e);
            Router::errorPages(500);

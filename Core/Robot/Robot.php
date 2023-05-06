@@ -96,7 +96,12 @@ class Robot
           }
       }else{
           if($op === 'api-call'){
-              return Updating::update(self::schema()['table'],['status'=>1], ['viewUrl'=>$url]);
+              $result = Updating::update(self::schema()['table'],['status'=>1], ['viewUrl'=>$url]);
+               if(!empty($result)){
+                  return self::upDateRobotFile();
+               }
+          }else{
+               return self::upDateRobotFile();
           }
       }
       return false;
@@ -159,6 +164,7 @@ class Robot
 
           if(file_exists($_SERVER['DOCUMENT_ROOT'].'/robots.txt')){
               file_put_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt', '');
+              chmod($_SERVER['DOCUMENT_ROOT'].'/robots.txt', 0777);
           }
           file_put_contents($_SERVER['DOCUMENT_ROOT'].'/robots.txt', $content);
           $handler = fopen($_SERVER['DOCUMENT_ROOT'].'/robots.txt','a');
@@ -195,6 +201,7 @@ class Robot
       }
       $views = new RouteConfiguration();
       $allViews = $views->getAllViews();
+     
       foreach ($allViews as $key=>$value){
           if(gettype($value) == 'array'){
               if($value['view_role_access'] !== "administrator"){

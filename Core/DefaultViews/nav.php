@@ -43,7 +43,7 @@ global $HOME;
       <div class="flex h-16 items-center justify-between">
         <div class="flex items-center">
           <div class="flex-shrink-0">
-            <img class="h-8 w-8" src=" http://localhost/developement/Files/logo.png?color=indigo&shade=500" alt="Your Company">
+            <img class="h-8 w-8" src="Files/logo.png?color=indigo&shade=500" alt="Your Company">
           </div>
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
