@@ -30,6 +30,7 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         array (
             'Svg\\' => 4,
             'Site\\' => 5,
+            'SiteMap\\' => 8,
             'Sessions\\' => 9,
             'Sabberworm\\CSS\\' => 15,
         ),
@@ -111,6 +112,7 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         array (
             'Assest\\' => 7,
             'ApiHandler\\' => 11,
+            'Alias\\' => 6,
             'Alerts\\' => 7,
         ),
     );
@@ -143,6 +145,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         'Site\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Core/Site',
+        ),
+        'SiteMap\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Core/SiteMap',
         ),
         'Sessions\\' => 
         array (
@@ -311,6 +317,10 @@ class ComposerStaticInit1dba5613abded84caabc95765f21e30a
         'ApiHandler\\' => 
         array (
             0 => __DIR__ . '/../..' . '/Core/ApiHandler',
+        ),
+        'Alias\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/Core/Alias',
         ),
         'Alerts\\' => 
         array (
