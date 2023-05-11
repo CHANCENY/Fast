@@ -13,6 +13,7 @@ return array(
     'UI\\' => array($baseDir . '/Core/UI'),
     'Svg\\' => array($vendorDir . '/phenx/php-svg-lib/src/Svg'),
     'Site\\' => array($baseDir . '/Core/Site'),
+    'SiteMap\\' => array($baseDir . '/Core/SiteMap'),
     'Sessions\\' => array($baseDir . '/Core/Sessions'),
     'Sabberworm\\CSS\\' => array($vendorDir . '/sabberworm/php-css-parser/src'),
     'RoutesManager\\' => array($baseDir . '/Core/Router/RouterController'),
@@ -55,5 +56,6 @@ return array(
     'Brick\\Math\\' => array($vendorDir . '/brick/math/src'),
     'Assest\\' => array($baseDir . '/Core/Assest'),
     'ApiHandler\\' => array($baseDir . '/Core/ApiHandler'),
+    'Alias\\' => array($baseDir . '/Core/Alias'),
     'Alerts\\' => array($baseDir . '/Core/Alerts'),
 );

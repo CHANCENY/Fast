@@ -11,8 +11,9 @@ class SelectionLayer
   private array $keysValuePair;
 
   private bool $sessioned;
+    private string $table;
 
-  public function setSession(string $key = "")  : SelectionLayer{
+    public function setSession(string $key = "")  : SelectionLayer{
       if(!empty($key)){
           $this->sessioned = $key;
       }
