@@ -58,6 +58,7 @@ $base = \GlobalsFunctions\Globals::protocal().'://'.\GlobalsFunctions\Globals::s
                             <h5 class="mbr-section-title mbr-fonts-style mb-2 display-7 flex">
                                 <strong><?php echo $post['post_title']; ?></strong>
                                 <img class="float-lg-end border border-white" style="width: 50px; height: 50px; border-radius: 100%; display: inline-flex;" src="<?php echo \User\User::loadUser($post['uid'])['profileImage']; ?>" alt="<?php echo \User\User::loadUser($post['uid'])['profileImage']; ?>">
+                                <a class="poster-view?poster=<?php echo $post['uid']; ?>">view</a>
                             </h5>
                             <p class="mbr-text mbr-fonts-style display-4"><?php echo $post['post_body']; ?></p>
                             <div class="ms-auto">

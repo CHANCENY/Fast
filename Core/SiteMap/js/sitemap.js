@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', (e)=>{
         xhr.setRequestHeader('Content-Type','application/json');
         xhr.onload = function (){
             if(this.status === 200){
+                console.log(this.responseText);
                 const datas = JSON.parse(this.responseText);
             }
         }

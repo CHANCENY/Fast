@@ -1,4 +1,12 @@
-<?php @session_start(); ?>
+<?php @session_start();
+$views = (new \Datainterface\mysql\SelectionLayer())->setTableName('routes')->selectAll()->rows();
+$viewUrls = [];
+foreach ($views as $key=>$value){
+    if(gettype($value) === 'array'){
+        $viewUrls[] = $value['view_url'];
+    }
+}
+?>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" />
 <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
@@ -18,15 +26,37 @@
 </div>
 
 <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
-    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
-       <?php if(!empty(\GlobalsFunctions\Globals::user()) && \GlobalsFunctions\Globals::user()[0]['role'] === "Admin"): ?>
-        <?php foreach (\GlobalsFunctions\Globals::privateMenus() as $menu=>$value): ?>
-        <li class="mr-2" role="presentation">
-            <a href="<?php echo $value['view_url']; ?>" class="inline-block p-4 border-b-2 rounded-t-lg" id="forgot-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false"><?php echo $value['view_name'];?></a>
-        </li>
-        <?php endforeach; ?>
-        <?php endif; ?>
-    </ul>
+    <div class="row">
+        <div class="col-8 border-end w-auto">
+            <h2 class="display-3 text-center fs-2">Built in Views</h2>
+            <ul class="flex flex-wrap d-block" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+                <?php if(!empty(\GlobalsFunctions\Globals::user()) && \GlobalsFunctions\Globals::user()[0]['role'] === "Admin"): ?>
+                    <?php foreach (\GlobalsFunctions\Globals::privateMenus() as $menu=>$value): ?>
+                        <?php if(array_search($value['view_url'], $viewUrls)): ?>
+                        <li class="mr-2" role="presentation">
+                            <a href="<?php echo $value['view_url']; ?>" class="list-group-item" id="forgot-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false"><?php echo $value['view_name'];?></a>
+                        </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+        </div>
+        <div class="col-8">
+            <h2 class="display-3 text-center fs-2">Your Views (private access)</h2>
+            <ul class="flex flex-wrap d-block" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+                <?php if(!empty(\GlobalsFunctions\Globals::user()) && \GlobalsFunctions\Globals::user()[0]['role'] === "Admin"): ?>
+                    <?php foreach (\GlobalsFunctions\Globals::privateMenus() as $menu=>$value): ?>
+                        <?php if(!array_search($value['view_url'], $viewUrls)): ?>
+                            <li class="mr-2" role="presentation">
+                                <a href="<?php echo $value['view_url']; ?>" class="list-group-item" id="forgot-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false"><?php echo $value['view_name'];?></a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+
 </div>
 
 <div id="myTabContent">

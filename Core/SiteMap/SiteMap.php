@@ -63,11 +63,12 @@ class SiteMap
       $maker = new MysqlDynamicTables();
       $maker->resolver(Database::database(),$this->schema()['col'],$this->schema()['attr'],$this->schema()['table'],false);
       $maker->resolver(Database::database(),
-          ['scid','enabled','view_default','priority','update_check'],
+          ['scid','enabled','view_default','priority','update_check','skipped'],
           ['scid'=>['int(11)','auto_increment','primary key'], 'enabled'=>['varchar(20)'],
           'view_default'=>['varchar(20)'],
               'priority'=>['varchar(5)'],
-              'update_check'=>['varchar(50)']
+              'update_check'=>['varchar(50)'],
+              'skipped'=>['text']
           ],
           'sitemap_config',false
       );
@@ -92,7 +93,8 @@ class SiteMap
                 $query[0]['enabled'] ?? null,
                 $query[0]["view_default"] ?? null,
                 $query[0]["priority"] ?? null,
-                $query[0]["update_check"] ?? null
+                $query[0]["update_check"] ?? null,
+                $query[0]['skipped'] ?? null
               ];
     }
 
@@ -100,29 +102,46 @@ class SiteMap
         if(SecurityChecker::isConfigExist()){
             if(Database::database() !== null){
                 if(!empty($data)){
+                    $config = $this->siteMapConfigs();
                     foreach ($data as $key=>$value){
                         if(gettype($value) === 'string'){
                             $already = (new SelectionLayer())
                                 ->setTableName($this->schema()['table'])
                                 ->setKeyValue(['url'=>$value])
                                 ->selectBy()->rows();
-                           if(empty($already)){
-                               (new InsertionLayer())
-                                   ->setTableName($this->schema()['table'])
-                                   ->setData(['url'=>$value])
-                                   ->insert();
-                           }else{
-                               (new UpdatingLayer())->setTableName($this->schema()['table'])
-                                   ->setData(['url'=>$value])->keys(['sid'=>$already[0]['sid']])
-                                   ->update();
-                           }
-
+                            if(empty($already)){
+                                (new InsertionLayer())
+                                    ->setTableName($this->schema()['table'])
+                                    ->setData(['url'=>$value])
+                                    ->insert();
+                            }else{
+                                (new UpdatingLayer())->setTableName($this->schema()['table'])
+                                    ->setData(['url'=>$value])->keys(['sid'=>$already[0]['sid']])
+                                    ->update();
+                            }
                         }
                     }
                 }
             }
         }
         return $this;
+    }
+
+    public function filterFromConfig($list): bool{
+        $config = $this->siteMapConfigs();
+        $forbidden  = $config[4];
+        if(empty($forbidden)){
+            return false;
+        }
+        $forbidden = strpos($forbidden, ',') ? $forbidden : $forbidden.',';
+        $forbiddenList = array_filter(explode(',', $forbidden), 'strlen');
+        $list = array_filter($list, 'strlen');
+        foreach ($forbiddenList as $key=>$value){
+            if(array_search($value, $list)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public function makeSiteMapFile():SiteMap
@@ -139,19 +158,24 @@ class SiteMap
         $urlSet  = "";
         foreach ($data as $key=>$value){
             $loc = $value['url'];
-            $url = parse_url($loc,PHP_URL_PATH);
-            $url = $url[0] === '/' ? substr($url,1) : $url;
-            $list = explode('/',$url);
-            $url = trim(str_replace('#','',end($list)));
-            $loc = $loc[strlen($loc)-1] === '#' ? substr($loc,0,strlen($loc)-1) : $loc;
-            $r = $this->disallowed($url, $loc);
-            $priority = $config[2];
-            $timeUpdated = new \DateTime('now',);
-            $time = $timeUpdated->format('c');
-            $checking = $config[3];
-            if(!empty($r)){
-                $urlSet .= str_replace(['{{link}}','{{time}}','{{pr}}','{{checking}}'],[$loc,$time,$priority,$checking], $this->templates());
-                $urlSet .= PHP_EOL;
+            $list = explode('/', $loc);
+            if($this->filterFromConfig($list)){
+                continue;
+            }else{
+                $url = parse_url($loc,PHP_URL_PATH);
+                $url = str_starts_with($url, '/') ? substr($url,1) : $url;
+                $list = explode('/',$url);
+                $url = trim(str_replace('#','',end($list)));
+                $loc = $loc[strlen($loc)-1] ?? "" === '#' ? substr($loc,0,strlen($loc)) : $loc;
+                $r = $this->disallowed($url, $loc);
+                $priority = $config[2];
+                $timeUpdated = new \DateTime('now',);
+                $time = $timeUpdated->format('c');
+                $checking = $config[3];
+                if(!empty($r)){
+                    $urlSet .= str_replace(['{{link}}','{{time}}','{{pr}}','{{checking}}'],[$loc,$time,$priority,$checking], $this->templates());
+                    $urlSet .= PHP_EOL;
+                }
             }
         }
         $this->siteMap = str_replace('{{placeholder}}', $urlSet, $this->siteMap);
