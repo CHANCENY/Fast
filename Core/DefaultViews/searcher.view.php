@@ -3,7 +3,7 @@ $t = new \Datainterface\mysql\TablesLayer();
 $tables = $t->getTables()->tables();
 global $placeholder;
 ?>
-<form id="form-search" method="GET" action="#" class="w-50 float-end">
+<form id="form-search" method="GET" action="#" class="w-100 float-end">
     <div class="flex">
             <select name="table" id="table" class="py-2 text-sm text-dark-700 dark:text-dark-200">
                 <?php if(!empty($tables)): ?>

@@ -1,11 +1,29 @@
 <?php @session_start();
 $views = (new \Datainterface\mysql\SelectionLayer())->setTableName('routes')->selectAll()->rows();
-$viewUrls = [];
+$urls = [];
 foreach ($views as $key=>$value){
     if(gettype($value) === 'array'){
-        $viewUrls[] = $value['view_url'];
+        $urls[] = $value['view_url'];
     }
 }
+$file = (new \RoutesManager\RoutesManager())->tempReaderView();
+$defaults = [];
+$yours = [];
+
+$urls2 = [];
+foreach ($file as $key=>$value){
+    if(in_array($value['view_url'], $urls)){
+        $defaults[] = $value;
+        $urls2[] = $value['view_url'];
+    }
+}
+
+foreach ($views as $key=>$value){
+    if(!in_array($value['view_url'], $urls2)){
+        $yours[] = $value;
+    }
+}
+
 ?>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" />
 <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
@@ -31,8 +49,8 @@ foreach ($views as $key=>$value){
             <h2 class="display-3 text-center fs-2">Built in Views</h2>
             <ul class="flex flex-wrap d-block" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
                 <?php if(!empty(\GlobalsFunctions\Globals::user()) && \GlobalsFunctions\Globals::user()[0]['role'] === "Admin"): ?>
-                    <?php foreach (\GlobalsFunctions\Globals::privateMenus() as $menu=>$value): ?>
-                        <?php if(array_search($value['view_url'], $viewUrls)): ?>
+                    <?php foreach ($defaults as $key=>$value): ?>
+                        <?php if($value['view_role_access'] === 'private'): ?>
                         <li class="mr-2" role="presentation">
                             <a href="<?php echo $value['view_url']; ?>" class="list-group-item" id="forgot-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false"><?php echo $value['view_name'];?></a>
                         </li>
@@ -45,8 +63,34 @@ foreach ($views as $key=>$value){
             <h2 class="display-3 text-center fs-2">Your Views (private access)</h2>
             <ul class="flex flex-wrap d-block" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
                 <?php if(!empty(\GlobalsFunctions\Globals::user()) && \GlobalsFunctions\Globals::user()[0]['role'] === "Admin"): ?>
-                    <?php foreach (\GlobalsFunctions\Globals::privateMenus() as $menu=>$value): ?>
-                        <?php if(!array_search($value['view_url'], $viewUrls)): ?>
+                    <?php foreach ($yours as $key=>$value): ?>
+                        <?php if($value['view_role_access'] === 'private'): ?>
+                            <li class="mr-2" role="presentation">
+                                <a href="<?php echo $value['view_url']; ?>" class="list-group-item" id="forgot-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false"><?php echo $value['view_name'];?></a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+
+            <h2 class="display-3 text-center fs-2">Your Views (public access)</h2>
+            <ul class="flex flex-wrap d-block" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+                <?php if(!empty(\GlobalsFunctions\Globals::user()) && \GlobalsFunctions\Globals::user()[0]['role'] === "Admin"): ?>
+                    <?php foreach ($yours as $key=>$value): ?>
+                        <?php if($value['view_role_access'] === 'public'): ?>
+                            <li class="mr-2" role="presentation">
+                                <a href="<?php echo $value['view_url']; ?>" class="list-group-item" id="forgot-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false"><?php echo $value['view_name'];?></a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </ul>
+
+            <h2 class="display-3 text-center fs-2">Your Views (moderator access)</h2>
+            <ul class="flex flex-wrap d-block" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+                <?php if(!empty(\GlobalsFunctions\Globals::user()) && \GlobalsFunctions\Globals::user()[0]['role'] === "Admin"): ?>
+                    <?php foreach ($yours as $key=>$value): ?>
+                        <?php if($value['view_role_access'] === 'moderator'): ?>
                             <li class="mr-2" role="presentation">
                                 <a href="<?php echo $value['view_url']; ?>" class="list-group-item" id="forgot-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false"><?php echo $value['view_name'];?></a>
                             </li>
