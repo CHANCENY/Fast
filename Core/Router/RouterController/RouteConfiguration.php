@@ -127,6 +127,12 @@ class RouteConfiguration
                 return "File already exist you cant override any file please provide new filename .(extension)";
             }
 
+            $list = explode('/', $fileToCreate);
+            $dir = implode('/',array_slice($list, 0, count($list) - 1));
+            if(mkdir($dir)){
+                chmod($dir, 0777);
+            }
+
             //create file
             $contentWrite = $this->boilerpulate($fileToCreate);
             $handler = fopen($fileToCreate, 'w+');
