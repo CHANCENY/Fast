@@ -4,17 +4,22 @@
 $menus = \GlobalsFunctions\Globals::menus();
 
 $links = "";
+$links2 = "";
 $sec = new \MiddlewareSecurity\Security();
 $user = $sec->checkCurrentUser();
 foreach ($menus as $menu){
     $m = "<a href='{$menu['view_url']}' class='text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium'>{$menu['view_name']}</a>";
     $links .= $m;
+    $links2 .= "<a href='{$menu['view_url']}' class='text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium'>{$menu['view_name']}</a>";
+
 }
 if($user === "U-NULL"){
     $links = "";
+    $links2 = "";
 }
 if($user === "U-COMMON"){
     $links = "";
+    $links2 = "";
 }
 global $HOME;
 
@@ -48,8 +53,7 @@ global $HOME;
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-              <a href="<?php echo $HOME; ?>" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Dashboard</a>
-              <?php print_r($links); ?>
+              <a href="<?php echo $HOME; ?>" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Dashboard</a><?php echo $links; ?>
             </div>
           </div>
         </div>
@@ -72,16 +76,6 @@ global $HOME;
                 </button>
               </div>
 
-              <!--
-                Dropdown menu, show/hide based on menu state.
-
-                Entering: "transition ease-out duration-100"
-                  From: "transform opacity-0 scale-95"
-                  To: "transform opacity-100 scale-100"
-                Leaving: "transition ease-in duration-75"
-                  From: "transform opacity-100 scale-100"
-                  To: "transform opacity-0 scale-95"
-              -->
             </div>
           </div>
         </div>
@@ -112,39 +106,22 @@ global $HOME;
 
     <!-- Mobile menu, show/hide based on menu state. -->
     <div class="md:hidden" id="mobile-menu">
-      <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
-        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-        <a href="<?php echo $HOME; ?>" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Dashboard</a>
-
-        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Team</a>
-
-        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Projects</a>
-
-        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Calendar</a>
-
-        <a href="#" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Reports</a>
-      </div>
-      <div class="border-t border-gray-700 pt-4 pb-3">
-        <div class="flex items-center px-5">
-          <div class="flex-shrink-0">
-            <img class="h-10 w-10 rounded-full" src="<?php echo \GlobalsFunctions\Globals::user()[0]['image'] ?? ""; ?>=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
-          </div>
-
-          <button type="button" class="ml-auto flex-shrink-0 rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
-            <span class="sr-only">View notifications</span>
-            <!-- Heroicon name: outline/bell -->
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-            </svg>
-          </button>
+        <div class="space-y-1 px-2 pt-2 pb-3 sm:px-3">
+            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+            <a href="<?php echo $HOME; ?>" class="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium" aria-current="page">Dashboard</a><?php echo $links2; ?>
         </div>
-      </div>
+        <div class="border-t border-gray-700 pt-4 pb-3">
+            <div class="flex items-center px-5">
+                <div class="flex-shrink-0">
+                    <img class="h-10 w-10 rounded-full" src="<?php echo \GlobalsFunctions\Globals::user()[0]['image'] ?? ""; ?>=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="">
+                </div>
+            </div>
+        </div>
     </div>
-  </nav>
+    </nav>
 
   <header class="bg-white shadow">
     <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8 d-inline">
-        <h1 class="text-3xl font-bold tracking-tight text-gray-900 float-lg-start">Dashboard</h1>
-        <?php \Core\Router::attachView('searching'); ?>
+        <?php \Core\Router::attachView('searching');?>
     </div>
   </header>
