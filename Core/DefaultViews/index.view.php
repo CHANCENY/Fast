@@ -1,29 +1,17 @@
 <?php @session_start();
 $views = (new \Datainterface\mysql\SelectionLayer())->setTableName('routes')->selectAll()->rows();
-$urls = [];
-foreach ($views as $key=>$value){
-    if(gettype($value) === 'array'){
-        $urls[] = $value['view_url'];
-    }
-}
-$file = (new \RoutesManager\RoutesManager())->tempReaderView();
+
 $defaults = [];
 $yours = [];
-
-$urls2 = [];
-foreach ($file as $key=>$value){
-    if(in_array($value['view_url'], $urls)){
-        $defaults[] = $value;
-        $urls2[] = $value['view_url'];
-    }
-}
-
 foreach ($views as $key=>$value){
-    if(!in_array($value['view_url'], $urls2)){
-        $yours[] = $value;
+    if(gettype($value) === 'array'){
+        if(str_contains($value['view_path_absolute'],'Core/DefaultViews')){
+            $defaults[]= $value;
+        }else{
+            $yours[] = $value;
+        }
     }
 }
-
 ?>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" />
 <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
