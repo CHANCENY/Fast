@@ -12,8 +12,9 @@ if(\GlobalsFunctions\Globals::method() === 'POST'){
        $priority = \GlobalsFunctions\Globals::post('priority');
        $update = \GlobalsFunctions\Globals::post('update');
        $domains = \GlobalsFunctions\Globals::post('domains');
+       $private = \GlobalsFunctions\Globals::post('private') === 'on' ? "allowed" : "disallowed";
        $map = new \SiteMap\SiteMap();
-       if($map->config(['enabled'=>$save,'view_default'=>$default,'priority'=>$priority, 'update_check'=>$update,'skipped'=>$domains])){
+       if($map->config(['enabled'=>$save,'view_default'=>$default,'priority'=>$priority, 'update_check'=>$update,'skipped'=>$domains,'private'=>$private])){
            $msg = \Alerts\Alerts::alert('info', "Site map {$save}");
        }else{
            $msg = \Alerts\Alerts::alert('danger', "Site map {$save}");
@@ -87,6 +88,10 @@ foreach ($updates as $key=>$pr){
                         <div class="form-group">
                             <label for="domains">Domains to Skip (separated by ,)</label>
                             <textarea class="form-control" name="domains" cols="2" rows="2"><?php echo $config[4]; ?></textarea>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="private">Private Views allow/disallowed</label>
+                            <input  type="checkbox" <?php echo $config[5] === 'allowed' ? 'checked' : null; ?> name="private" class="form-check" id="private">
                         </div>
                         <button name="sitemapbtn" type="submit" class="btn mt-4 d-block w-100 btn-primary bg-primary">Save</button>
                     </div>

@@ -63,12 +63,13 @@ class SiteMap
       $maker = new MysqlDynamicTables();
       $maker->resolver(Database::database(),$this->schema()['col'],$this->schema()['attr'],$this->schema()['table'],false);
       $maker->resolver(Database::database(),
-          ['scid','enabled','view_default','priority','update_check','skipped'],
+          ['scid','enabled','view_default','priority','update_check','skipped','private'],
           ['scid'=>['int(11)','auto_increment','primary key'], 'enabled'=>['varchar(20)'],
           'view_default'=>['varchar(20)'],
               'priority'=>['varchar(5)'],
               'update_check'=>['varchar(50)'],
-              'skipped'=>['text']
+              'skipped'=>['text'],
+              'private' =>['varchar(20)']
           ],
           'sitemap_config',false
       );
@@ -94,7 +95,8 @@ class SiteMap
                 $query[0]["view_default"] ?? null,
                 $query[0]["priority"] ?? null,
                 $query[0]["update_check"] ?? null,
-                $query[0]['skipped'] ?? null
+                $query[0]['skipped'] ?? null,
+                $query[0]['private'] ?? null
               ];
     }
 
@@ -159,8 +161,12 @@ class SiteMap
         foreach ($data as $key=>$value){
             $loc = $value['url'];
             $list = explode('/', $loc);
+            $this->isPrivate($loc);
+
             if($this->filterFromConfig($list)){
                 continue;
+            }elseif ($this->isPrivate($loc)){
+               continue;
             }else{
                 $url = parse_url($loc,PHP_URL_PATH);
                 $url = str_starts_with($url, '/') ? substr($url,1) : $url;
@@ -219,6 +225,35 @@ class SiteMap
         }else{
             return $actual;
         }
+    }
+
+    public function isPrivate($requestUrl): bool
+    {
+        if(!SecurityChecker::isConfigExist()){
+          return false;
+        }
+        if(Database::database() === null){
+            return false;
+        }
+        $list = explode('?', $requestUrl);
+        $path = explode('/', $list[0]);
+        $url = end($path);
+        $view = Globals::findViewByUrl($url);
+
+        $config = $this->siteMapConfigs();
+        if(!empty($view)){
+            if($view['view_role_access'] === 'private' ||
+                $view['view_role_access'] === 'administrator' ||
+                $view['view_role_access'] === 'moderator'){
+                if(empty($config[5]) ||$config[5] === 'disallowed'){
+                    return false;
+                }else{
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
 
